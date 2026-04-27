@@ -61,7 +61,7 @@ export const nigerianRecipes = [
   },
   {
     id: "ng-egusi",
-    name: "Egusi Soup (Lumpy Style)",
+    name: "Egusi Soup",
     image: egusisoupImg,
     ingredients: ["egusi", "palm oil", "bitter leaf", "ugwu", "beef", "stock fish", "crayfish", "pepper"],
     steps: [

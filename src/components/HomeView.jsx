@@ -27,8 +27,14 @@ const HomeView = ({
   const commonIngredients = [
     { name: 'Rice', icon: '🍚' },
     { name: 'Beans', icon: '🫘' },
+    { name: 'Flour', icon: '🥡' },
+    { name: 'Sugar', icon: '🍬' },     // Added Sugar
+    { name: 'Beef', icon: '🥩' },
     { name: 'Chicken', icon: '🍗' },
     { name: 'Yam', icon: '🍠' },
+    { name: 'Noodles', icon: '🍜' },
+    { name: 'Spaghetti', icon: '🍝' },
+    { name: 'Banana', icon: '🍌' },
     { name: 'Spinach', icon: '🥬' },
     { name: 'Tomato', icon: '🍅' },
     { name: 'Egg', icon: '🥚' },
