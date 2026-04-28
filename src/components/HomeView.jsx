@@ -2,17 +2,16 @@ import React, { useState } from 'react';
 import { 
   Search, X, Loader2, LayoutGrid, Heart, 
   LogOut, Plus, ChefHat, PanelRightClose, PanelRightOpen,
-  ShoppingCart // NEW: Import ShoppingCart
+  ShoppingCart 
 } from 'lucide-react';
 import RecipeCard from './RecipeCard';
-import MarketList from './MarketList'; // NEW: Import the MarketList component
+import MarketList from './MarketList'; 
 
 const HomeView = ({ 
   userName, 
   pantry, setPantry, inputValue, setInputValue, addIngredient, 
   isLoading, recipes, onLogout,
   favorites, tried, activeTab, setActiveTab, toggleFavorite, toggleTried,
-  // NEW: Props from App.jsx
   shoppingList, removeFromShoppingList, clearShoppingList 
 }) => {
   const [isPantryVisible, setIsPantryVisible] = useState(true);
@@ -57,7 +56,6 @@ const HomeView = ({
           <span className={`text-[10px] font-bold uppercase ${activeTab === 'all' ? 'text-orange-500' : 'text-gray-300'}`}>Discover</span>
         </button>
 
-        {/* NEW: Desktop Market Link with Badge */}
         <button onClick={() => setActiveTab('market')} className="flex flex-col items-center gap-1 group relative">
           <ShoppingCart className={activeTab === 'market' ? 'text-orange-500' : 'text-gray-300'} size={22} />
           {shoppingList.length > 0 && (
@@ -80,53 +78,67 @@ const HomeView = ({
 
         <button onClick={onLogout} className="mt-auto flex flex-col items-center gap-1 text-gray-300 hover:text-red-500 mb-4">
           <LogOut size={22} />
-          <span className="text-[10px] font-bold uppercase">Log Out</span>
+          <span className="text-[10px] font-black uppercase">Exit</span>
         </button>
       </aside>
 
       {/* Main Content Area */}
       <main className="flex-1 overflow-y-auto p-4 md:p-10 w-full">
-        {/* Conditional Header: Only show search if NOT in market tab */}
-        {activeTab !== 'market' ? (
-          <>
-            <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-8">
-              <div className="flex items-center justify-between lg:justify-start gap-4 w-full lg:w-auto">
-                <div className="flex items-center gap-4">
-                  <div className="md:hidden w-10 h-10 bg-orange-500 rounded-xl flex items-center justify-center text-white font-black text-sm">
-                    {getAvatarContent(userName)}
-                  </div>
-                  <div>
-                    <h1 className="text-2xl md:text-4xl font-black text-slate-900 tracking-tight">
-                      {activeTab === 'all' && "Recipe Finder"}
-                      {activeTab === 'favorites' && "Saved Recipes"}
-                      {activeTab === 'tried' && "Cooking History"}
-                    </h1>
-                    <p className="text-gray-400 font-medium italic text-xs mt-1">
-                      Welcome back, {userName || 'Guest'}!
-                    </p>
-                  </div>
-                </div>
-                <button onClick={() => setIsPantryVisible(!isPantryVisible)} className="hidden xl:block p-2.5 bg-white border rounded-xl text-gray-400 hover:text-orange-500">
+        {/* REFINED HEADER: Unified for all tabs and mobile logout */}
+        <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-8">
+          <div className="flex items-center justify-between lg:justify-start gap-4 w-full lg:w-auto">
+            <div className="flex items-center gap-4">
+              <div className="md:hidden w-10 h-10 bg-orange-500 rounded-xl flex items-center justify-center text-white font-black text-sm">
+                {getAvatarContent(userName)}
+              </div>
+              <div>
+                <h1 className="text-2xl md:text-4xl font-black text-slate-900 tracking-tight">
+                  {activeTab === 'all' && "Recipe Finder"}
+                  {activeTab === 'favorites' && "Saved Recipes"}
+                  {activeTab === 'tried' && "Cooking History"}
+                  {activeTab === 'market' && "Market List"}
+                </h1>
+                {activeTab !== 'market' && (
+                  <p className="text-gray-400 font-medium italic text-xs mt-1">
+                    Welcome back, {userName || 'Guest'}!
+                  </p>
+                )}
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2">
+              {activeTab !== 'market' && (
+                <button onClick={() => setIsPantryVisible(!isPantryVisible)} className="hidden xl:block p-2.5 bg-white border rounded-xl text-gray-400 hover:text-orange-500 transition-colors">
                   {isPantryVisible ? <PanelRightClose size={20} /> : <PanelRightOpen size={20} />}
                 </button>
-              </div>
-              
-              <div className="relative w-full lg:w-80">
-                <Search className="absolute left-4 top-3.5 text-gray-400 w-4 h-4" />
-                <input 
-                  className="w-full pl-11 pr-4 py-3.5 bg-gray-100 rounded-2xl focus:ring-2 focus:ring-orange-500/20 outline-none font-medium text-sm" 
-                  placeholder="Search ingredient..." 
-                  value={inputValue} onChange={(e) => setInputValue(e.target.value)} onKeyDown={addIngredient} 
-                />
-              </div>
-            </header>
+              )}
+              {/* MOBILE LOGOUT: Top right placement */}
+              <button onClick={onLogout} className="md:hidden p-2.5 bg-white border border-slate-100 rounded-xl text-slate-300 hover:text-red-500 shadow-sm transition-colors">
+                <LogOut size={20} />
+              </button>
+            </div>
+          </div>
+          
+          {activeTab !== 'market' && (
+            <div className="relative w-full lg:w-80">
+              <Search className="absolute left-4 top-3.5 text-gray-400 w-4 h-4" />
+              <input 
+                className="w-full pl-11 pr-4 py-3.5 bg-gray-100 rounded-2xl focus:ring-2 focus:ring-orange-500/20 outline-none font-medium text-sm" 
+                placeholder="Search ingredient..." 
+                value={inputValue} onChange={(e) => setInputValue(e.target.value)} onKeyDown={addIngredient} 
+              />
+            </div>
+          )}
+        </header>
 
+        {activeTab !== 'market' ? (
+          <>
             {/* Mobile Horizontal Pantry */}
             <div className="xl:hidden mb-8">
               <h2 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Quick Pantry</h2>
               <div className="flex gap-3 overflow-x-auto pb-4 no-scrollbar">
                 {commonIngredients.map((item) => (
-                  <button key={item.name} onClick={() => handleQuickAdd(item.name)} className="shrink-0 flex items-center gap-2 px-4 py-3 bg-white border rounded-2xl shadow-sm">
+                  <button key={item.name} onClick={() => handleQuickAdd(item.name)} className="shrink-0 flex items-center gap-2 px-4 py-3 bg-white border rounded-2xl shadow-sm active:scale-95 transition-transform">
                     <span className="text-lg">{item.icon}</span>
                     <span className="text-xs font-bold text-slate-700">{item.name}</span>
                   </button>
@@ -137,8 +149,8 @@ const HomeView = ({
             {/* Tags */}
             <div className="flex flex-wrap gap-2 mb-8 min-h-10">
               {pantry.length > 0 ? pantry.map(item => (
-                <span key={item} className="flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-full font-bold text-[10px] uppercase">
-                  {item} <X className="w-3.5 h-3.5 cursor-pointer" onClick={() => setPantry(pantry.filter(i => i !== item))} />
+                <span key={item} className="flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-full font-bold text-[10px] uppercase shadow-sm">
+                  {item} <X className="w-3.5 h-3.5 cursor-pointer hover:text-orange-500 transition-colors" onClick={() => setPantry(pantry.filter(i => i !== item))} />
                 </span>
               )) : <p className="text-[10px] font-black text-gray-300 uppercase tracking-widest">No active pantry filters</p>}
             </div>
@@ -146,7 +158,7 @@ const HomeView = ({
             {isLoading ? (
               <div className="flex flex-col items-center justify-center h-64 text-orange-500">
                 <Loader2 className="animate-spin w-10 h-10 mb-4" />
-                <p className="font-bold text-xs uppercase">Updating Grid...</p>
+                <p className="font-bold text-xs uppercase tracking-widest">Updating Grid...</p>
               </div>
             ) : (
               <div className={`grid gap-6 pb-10 transition-all ${isPantryVisible ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4'}`}>
@@ -155,25 +167,24 @@ const HomeView = ({
                     <RecipeCard key={recipe.id} recipe={recipe} isFavorite={favorites.includes(recipe.id)} isTried={tried.includes(recipe.id)} toggleFavorite={toggleFavorite} toggleTried={toggleTried} />
                   ))
                 ) : (
-                  <div className="col-span-full h-64 flex flex-col items-center justify-center border-2 border-dashed rounded-[40px] text-gray-300">
-                    <ChefHat size={40} className="mb-4 opacity-20" />
-                    <p className="font-bold uppercase text-[10px]">Nothing to show</p>
+                  <div className="col-span-full h-64 flex flex-col items-center justify-center border-2 border-dashed rounded-[40px] text-gray-300 bg-gray-50/30">
+                    <ChefHat size={40} className="mb-4 opacity-10" />
+                    <p className="font-black uppercase text-[10px] tracking-widest">Nothing to show in {activeTab}</p>
                   </div>
                 )}
               </div>
             )}
           </>
         ) : (
-          /* NEW: Market List View */
           <MarketList list={shoppingList} onRemove={removeFromShoppingList} onClear={clearShoppingList} />
         )}
       </main>
 
-      {/* Right Sidebar (Desktop Only) - Hidden if Market is active */}
+      {/* Right Sidebar (Desktop Only) */}
       {activeTab !== 'market' && (
-        <aside className={`bg-white border-l hidden xl:flex flex-col gap-8 overflow-y-auto shrink-0 transition-all ${isPantryVisible ? 'w-80 p-8' : 'w-0 p-0 opacity-0'}`}>
+        <aside className={`bg-white border-l hidden xl:flex flex-col gap-8 overflow-y-auto shrink-0 transition-all duration-500 ${isPantryVisible ? 'w-80 p-8' : 'w-0 p-0 border-none opacity-0'}`}>
           <div className="w-64">
-            <h2 className="text-[10px] font-black text-slate-900 uppercase tracking-widest mb-8 border-b pb-4">Quick Pantry</h2>
+            <h2 className="text-[10px] font-black text-slate-900 uppercase tracking-[0.2em] mb-8 border-b pb-4">Quick Pantry</h2>
             <div className="space-y-3">
               {commonIngredients.map((item) => (
                 <button key={item.name} onClick={() => handleQuickAdd(item.name)} className="w-full flex items-center justify-between p-4 bg-gray-50/50 rounded-2xl hover:bg-white hover:shadow-xl group border border-transparent hover:border-orange-100 transition-all">
@@ -181,7 +192,7 @@ const HomeView = ({
                     <span className="text-2xl group-hover:scale-110 transition-transform">{item.icon}</span>
                     <span className="text-sm font-bold text-slate-700">{item.name}</span>
                   </div>
-                  <Plus size={16} className="text-gray-300 group-hover:text-orange-500" />
+                  <Plus size={16} className="text-gray-300 group-hover:text-orange-500 transition-colors" />
                 </button>
               ))}
             </div>
@@ -193,25 +204,24 @@ const HomeView = ({
       <div className="md:hidden border-t bg-white flex justify-around items-center py-3 px-6 shrink-0 z-30 shadow-[0_-4px_12px_rgba(0,0,0,0.05)]">
         <button onClick={() => setActiveTab('all')} className="flex flex-col items-center gap-1">
           <LayoutGrid size={20} className={activeTab === 'all' ? 'text-orange-500' : 'text-gray-300'} />
-          <span className="text-[9px] font-black uppercase">Discover</span>
+          <span className={`text-[9px] font-black uppercase ${activeTab === 'all' ? 'text-orange-500' : 'text-gray-300'}`}>Discover</span>
         </button>
-        {/* NEW: Mobile Market Link with Badge */}
         <button onClick={() => setActiveTab('market')} className="flex flex-col items-center gap-1 relative">
           <ShoppingCart size={20} className={activeTab === 'market' ? 'text-orange-500' : 'text-gray-300'} />
           {shoppingList.length > 0 && (
-            <span className="absolute -top-1 -right-1 bg-orange-600 text-white text-[8px] font-black w-4 h-4 rounded-full flex items-center justify-center">
+            <span className="absolute -top-1 -right-1 bg-orange-600 text-white text-[8px] font-black w-4 h-4 rounded-full flex items-center justify-center border-2 border-white">
               {shoppingList.length}
             </span>
           )}
-          <span className="text-[9px] font-black uppercase">Market</span>
+          <span className={`text-[9px] font-black uppercase ${activeTab === 'market' ? 'text-orange-500' : 'text-gray-300'}`}>Market</span>
         </button>
         <button onClick={() => setActiveTab('tried')} className="flex flex-col items-center gap-1">
           <ChefHat size={20} className={activeTab === 'tried' ? 'text-orange-500' : 'text-gray-300'} />
-          <span className="text-[9px] font-black uppercase">Cooked</span>
+          <span className={`text-[9px] font-black uppercase ${activeTab === 'tried' ? 'text-orange-500' : 'text-gray-300'}`}>Cooked</span>
         </button>
         <button onClick={() => setActiveTab('favorites')} className="flex flex-col items-center gap-1">
           <Heart size={20} className={activeTab === 'favorites' ? 'text-orange-500' : 'text-gray-300'} />
-          <span className="text-[9px] font-black uppercase">Saved</span>
+          <span className={`text-[9px] font-black uppercase ${activeTab === 'favorites' ? 'text-orange-500' : 'text-gray-300'}`}>Saved</span>
         </button>
       </div>
 
