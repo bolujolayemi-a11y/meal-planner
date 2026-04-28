@@ -7,18 +7,22 @@ import { nigerianRecipes } from './nigerianData';
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userName, setUserName] = useState(localStorage.getItem('userName') || ''); // New: Track user name
+  const [userName, setUserName] = useState(localStorage.getItem('userName') || '');
   const [pantry, setPantry] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [recipes, setRecipes] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  // State for Favorites, Tried, and Navigation Tabs
+  // --- NEW: Shopping List State ---
+  const [shoppingList, setShoppingList] = useState(() => {
+    const saved = localStorage.getItem('market_list');
+    return saved ? JSON.parse(saved) : [];
+  });
+
   const [favorites, setFavorites] = useState(() => JSON.parse(localStorage.getItem('favRecipes')) || []);
   const [tried, setTried] = useState(() => JSON.parse(localStorage.getItem('triedRecipes')) || []);
-  const [activeTab, setActiveTab] = useState('all'); // 'all', 'favorites', 'tried'
+  const [activeTab, setActiveTab] = useState('all'); 
 
-  // Persistence: Check Auth and Sync User Collections
   useEffect(() => {
     const user = localStorage.getItem('isLoggedIn');
     if (user === 'true') setIsLoggedIn(true);
@@ -27,8 +31,10 @@ const App = () => {
   useEffect(() => {
     localStorage.setItem('favRecipes', JSON.stringify(favorites));
     localStorage.setItem('triedRecipes', JSON.stringify(tried));
-    localStorage.setItem('userName', userName); // Keep name synced
-  }, [favorites, tried, userName]);
+    localStorage.setItem('userName', userName);
+    // --- NEW: Sync Shopping List to LocalStorage ---
+    localStorage.setItem('market_list', JSON.stringify(shoppingList));
+  }, [favorites, tried, userName, shoppingList]);
 
   const handleAuth = (name) => {
     const identifier = name || 'Guest';
@@ -41,11 +47,27 @@ const App = () => {
   const handleLogout = () => {
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('userName');
+    localStorage.removeItem('market_list'); // Optional: clear list on logout
     setUserName('');
     setIsLoggedIn(false);
   };
 
-  // Functions to toggle Recipe Status
+  // --- NEW: Shopping List Handlers ---
+  const addToShoppingList = (item) => {
+    setShoppingList(prev => {
+      if (prev.includes(item)) return prev;
+      return [...prev, item];
+    });
+  };
+
+  const removeFromShoppingList = (item) => {
+    setShoppingList(prev => prev.filter(i => i !== item));
+  };
+
+  const clearShoppingList = () => {
+    setShoppingList([]);
+  };
+
   const toggleFavorite = (id) => {
     setFavorites(prev => prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]);
   };
@@ -114,7 +136,7 @@ const App = () => {
       <Route path="/" element={
         isLoggedIn ? (
           <HomeView 
-            userName={userName} // Passing down the name for the Avatar
+            userName={userName}
             pantry={pantry} 
             setPantry={setPantry} 
             inputValue={inputValue} 
@@ -129,13 +151,26 @@ const App = () => {
             setActiveTab={setActiveTab}
             toggleFavorite={toggleFavorite}
             toggleTried={toggleTried}
+            // --- NEW: Props for Shopping List ---
+            shoppingList={shoppingList}
+            removeFromShoppingList={removeFromShoppingList}
+            clearShoppingList={clearShoppingList}
           />
         ) : (
           <Navigate to="/signup" />
         )
       } />
 
-      <Route path="/recipe/:id" element={isLoggedIn ? <RecipeDetails /> : <Navigate to="/signup" />} />
+      <Route path="/recipe/:id" element={
+        isLoggedIn ? (
+          <RecipeDetails 
+            addToShoppingList={addToShoppingList} 
+            shoppingList={shoppingList} 
+          />
+        ) : (
+          <Navigate to="/signup" />
+        )
+      } />
     </Routes>
   );
 };
