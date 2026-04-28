@@ -1,18 +1,39 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   ArrowRight, CheckCircle2, AlertCircle, MapPin, 
-  Heart, Utensils, ChefHat 
+  Heart, ChefHat 
 } from 'lucide-react';
+import { translations, translateAPI } from '../utils/translations';
 
 const RecipeCard = ({ 
   recipe, 
+  lang, 
   isFavorite, 
   isTried, 
   toggleFavorite, 
   toggleTried 
 }) => {
   const navigate = useNavigate();
+  const [translatedName, setTranslatedName] = useState(recipe.name);
+  const t = translations[lang] || translations.en;
+
+  // --- TRANSLATE RECIPE NAME ON THE FLY ---
+  useEffect(() => {
+    const updateName = async () => {
+      if (lang === 'en' || !recipe.name) {
+        setTranslatedName(recipe.name);
+      } else {
+        try {
+          const result = await translateAPI(recipe.name, lang);
+          setTranslatedName(result);
+        } catch (error) {
+          setTranslatedName(recipe.name); // Fallback to original on error
+        }
+      }
+    };
+    updateName();
+  }, [recipe.name, lang]);
 
   const used = recipe.usedCount || 0;
   const missed = recipe.missedCount || 0;
@@ -33,35 +54,35 @@ const RecipeCard = ({
         <img 
           src={recipe.image || fallbackImage} 
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out" 
-          alt={recipe.name} 
+          alt={translatedName} 
           loading="lazy" 
-          onError={(e) => {
-            e.target.src = fallbackImage;
-          }}
+          onError={(e) => { e.target.src = fallbackImage; }}
         />
 
-        {/* --- NEW: Floating Interaction Buttons --- */}
-        <div className="absolute top-3 left-3 flex gap-2 z-10">
-          {/* Favorite Toggle */}
+        {/* --- ACTIONS OVERLAY --- */}
+        <div className={`absolute top-3 ${lang === 'ar' ? 'right-3' : 'left-3'} flex gap-2 z-10`}>
           <button 
-            onClick={(e) => {
-              e.stopPropagation();
-              toggleFavorite(recipe.id);
+            type="button"
+            onClick={(e) => { 
+              e.preventDefault();
+              e.stopPropagation(); 
+              toggleFavorite(recipe.id); 
             }}
-            className={`p-2.5 rounded-xl backdrop-blur-md transition-all shadow-lg cursor-pointer active:scale-90 ${
+            className={`p-2.5 rounded-xl backdrop-blur-md transition-all shadow-lg active:scale-90 ${
               isFavorite ? 'bg-orange-500 text-white' : 'bg-white/80 text-slate-400 hover:text-orange-500'
             }`}
           >
             <Heart size={16} fill={isFavorite ? "currentColor" : "none"} />
           </button>
 
-          {/* Tried Toggle */}
           <button 
-            onClick={(e) => {
-              e.stopPropagation();
-              toggleTried(recipe.id);
+            type="button"
+            onClick={(e) => { 
+              e.preventDefault();
+              e.stopPropagation(); 
+              toggleTried(recipe.id); 
             }}
-            className={`p-2.5 rounded-xl backdrop-blur-md transition-all shadow-lg cursor-pointer active:scale-90 ${
+            className={`p-2.5 rounded-xl backdrop-blur-md transition-all shadow-lg active:scale-90 ${
               isTried ? 'bg-green-500 text-white' : 'bg-white/80 text-slate-400 hover:text-green-500'
             }`}
           >
@@ -69,20 +90,19 @@ const RecipeCard = ({
           </button>
         </div>
         
-        {/* Readiness Badge (Moved to bottom of image for better layout) */}
-        <div className={`absolute bottom-3 left-3 text-[9px] px-3 py-1.5 rounded-full font-black uppercase flex items-center gap-1.5 shadow-lg backdrop-blur-md ${
+        {/* Readiness Badge */}
+        <div className={`absolute bottom-3 ${lang === 'ar' ? 'right-3' : 'left-3'} text-[9px] px-3 py-1.5 rounded-full font-black uppercase flex items-center gap-1.5 shadow-lg backdrop-blur-md z-10 ${
           isComplete ? 'bg-green-500 text-white' : 'bg-white/90 text-orange-600'
         }`}>
           {isComplete ? (
-            <><CheckCircle2 size={10} /> Ready to Cook</>
+            <><CheckCircle2 size={10} /> {t.cooked}</>
           ) : (
-            <><AlertCircle size={10} /> {missed} Missing</>
+            <><AlertCircle size={10} /> {missed} {t.ingredients}</>
           )}
         </div>
 
-        {/* Top Right Local Badge */}
         {recipe.isLocal && (
-          <div className="absolute top-3 right-3 bg-orange-500 text-white text-[9px] px-2.5 py-1.5 rounded-xl font-black shadow-lg flex items-center gap-1 border border-orange-400">
+          <div className={`absolute top-3 ${lang === 'ar' ? 'left-3' : 'right-3'} bg-orange-500 text-white text-[9px] px-2.5 py-1.5 rounded-xl font-black shadow-lg flex items-center gap-1 border border-orange-400 z-10`}>
             <MapPin size={10} fill="currentColor" />
             NG
           </div>
@@ -92,13 +112,12 @@ const RecipeCard = ({
       {/* Content Section */}
       <div className="px-1">
         <h3 className="font-bold text-lg mb-3 leading-tight text-slate-800 line-clamp-2 min-h-14">
-          {recipe.name}
+          {translatedName}
         </h3>
 
-        {/* Ingredient Match Meter */}
         <div className="mb-6">
           <div className="flex justify-between items-center mb-2">
-            <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Match Progress</p>
+            <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{t.pantry}</p>
             <span className="text-[10px] font-bold text-orange-600 font-mono">
               {used} / {totalIngredients}
             </span>
@@ -111,14 +130,18 @@ const RecipeCard = ({
           </div>
         </div>
 
+        {/* View Details Button */}
         <button 
           onClick={() => navigate(`/recipe/${recipe.id}`)}
           className={`w-full py-4 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm active:scale-[0.98] group-hover:gap-3 ${
             isTried ? 'bg-green-50 text-green-600 hover:bg-green-100' : 'bg-slate-900 text-white hover:bg-orange-500 hover:shadow-orange-200'
           }`}
         >
-          {isTried ? 'Cooked! See again' : 'View Cooking Steps'}
-          <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform duration-300" />
+          {isTried ? `${t.cooked}! ${t.read}` : t.start}
+          <ArrowRight 
+            size={16} 
+            className={`${lang === 'ar' ? 'rotate-180' : ''} group-hover:translate-x-1 transition-transform`} 
+          />
         </button>
       </div>
     </div>
