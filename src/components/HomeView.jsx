@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { 
   Search, LayoutGrid, Heart, LogOut, ShoppingCart, 
   Utensils, ChevronRight, Check, ArrowRight, ChefHat,
-  Globe, X, Trash2 
+  Globe, X, Trash2, Share2, Settings 
 } from 'lucide-react';
 import RecipeCard from './RecipeCard';
 import MarketList from './MarketList';
+import ShareModal from './ShareModal';
+import AboutModal from './AboutModal'; 
 import { pantryCategories } from '../utils/pantryCategories';
 import { translations } from '../utils/translations';
 import { nigerianRecipes } from '../nigerianData'; 
@@ -17,7 +19,12 @@ const HomeView = ({
   shoppingList, removeFromShoppingList, clearShoppingList, apiCache 
 }) => {
   
+  // Modal States
+  const [showSettings, setShowSettings] = useState(false);
   const [showLangPicker, setShowLangPicker] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
+  const [showAbout, setShowAbout] = useState(false);
+  
   const [langSearch, setLangSearch] = useState('');
   const t = translations[lang] || translations.en;
 
@@ -74,14 +81,12 @@ const HomeView = ({
         <div className="flex flex-col items-center gap-10">
           <NavButton active={activeTab === 'all'} onClick={() => setActiveTab('all')} icon={<LayoutGrid size={22} />} label="Discover" />
           <NavButton active={activeTab === 'pantry'} onClick={() => setActiveTab('pantry')} icon={<Utensils size={22} />} label={t.pantry} badge={pantry.length} />
-          <button onClick={() => setShowLangPicker(true)} className="flex flex-col items-center gap-1 text-gray-300 hover:text-orange-400 transition-all">
-            <Globe size={22} /><span className="text-[10px] font-bold uppercase">Lang</span>
-          </button>
           <NavButton active={activeTab === 'tried'} onClick={() => setActiveTab('tried')} icon={<ChefHat size={22} />} label={t.cooked} badge={tried.length} />
           <NavButton active={activeTab === 'favorites'} onClick={() => setActiveTab('favorites')} icon={<Heart size={22} />} label={t.saved} badge={favorites.length} />
           <NavButton active={activeTab === 'market'} onClick={() => setActiveTab('market')} icon={<ShoppingCart size={22} />} label={t.market} badge={shoppingList.length} />
+          <NavButton active={showSettings} onClick={() => setShowSettings(true)} icon={<Settings size={22} />} label="Settings" />
         </div>
-        <button onClick={onLogout} className="mt-auto flex flex-col items-center gap-1 text-gray-300 hover:text-red-500 pt-10">
+        <button onClick={onLogout} className="mt-auto flex flex-col items-center gap-1 text-gray-300 hover:text-red-500 pt-10 transition-colors">
           <LogOut size={22} /><span className="text-[10px] font-black uppercase">{t.exit}</span>
         </button>
       </aside>
@@ -89,7 +94,7 @@ const HomeView = ({
       {/* --- MAIN CONTENT --- */}
       <main className="flex-1 overflow-y-auto p-4 md:p-10 w-full relative pb-24 md:pb-10">
         
-        {/* MOBILE TOP BAR (Avatar + Logout) */}
+        {/* MOBILE HEADER */}
         <div className="flex md:hidden items-center justify-between mb-6 pt-2">
           <div className="w-10 h-10 bg-orange-500 rounded-xl flex items-center justify-center text-white font-black text-sm shadow-md">
             {getAvatarContent(userName)}
@@ -114,19 +119,12 @@ const HomeView = ({
              <div className="flex gap-2 w-full lg:w-80">
               <div className="relative flex-1">
                 <Search className={`absolute ${lang === 'ar' ? 'right-4' : 'left-4'} top-3.5 text-gray-400 w-4 h-4`} />
-                <input 
-                  className={`w-full ${lang === 'ar' ? 'pr-11 pl-4 text-right' : 'pl-11 pr-4'} py-3.5 bg-gray-100 rounded-2xl outline-none text-sm font-medium focus:ring-2 focus:ring-orange-500/20 transition-all`} 
-                  placeholder={t.search} 
-                  value={inputValue} 
-                  onChange={(e) => setInputValue(e.target.value)} 
-                  onKeyDown={addIngredient} 
-                />
+                <input className="w-full pl-11 pr-4 py-3.5 bg-gray-100 rounded-2xl outline-none text-sm font-medium focus:ring-2 focus:ring-orange-500/20" placeholder={t.search} value={inputValue} onChange={(e) => setInputValue(e.target.value)} onKeyDown={addIngredient} />
               </div>
             </div>
           )}
         </header>
 
-        {/* --- CONTENT AREA --- */}
         <div className="pb-8">
           {activeTab === 'market' ? (
             <MarketList list={shoppingList} onRemove={removeFromShoppingList} onClear={clearShoppingList} />
@@ -140,8 +138,8 @@ const HomeView = ({
             <div className="animate-in fade-in duration-500">
               {isLoading ? (
                 <div className="flex flex-col items-center justify-center py-20">
-                  <div className="w-12 h-12 border-4 border-orange-100 border-t-orange-500 rounded-full animate-spin mb-4"></div>
-                  <p className="text-slate-400 font-bold text-[10px] uppercase tracking-widest animate-pulse">Searching Recipes...</p>
+                  <div className="w-12 h-12 border-4 border-orange-100 border-t-orange-500 rounded-full animate-spin mb-4" />
+                  <p className="text-slate-400 font-bold text-[10px] uppercase tracking-widest animate-pulse">Searching...</p>
                 </div>
               ) : displayRecipes.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
@@ -150,30 +148,12 @@ const HomeView = ({
                   ))}
                 </div>
               ) : (
-                /* --- DYNAMIC EMPTY STATE --- */
                 <div className="flex flex-col items-center justify-center py-20 text-center animate-in zoom-in duration-300">
                   <div className="w-20 h-20 bg-slate-50 rounded-3xl flex items-center justify-center mb-6 border-2 border-dashed border-slate-200">
-                    {activeTab === 'all' ? (
-                      <Search className="text-slate-200" size={32} />
-                    ) : (
-                      <ChefHat className="text-slate-200" size={32} />
-                    )}
+                    {activeTab === 'all' ? <Search className="text-slate-200" size={32} /> : <ChefHat className="text-slate-200" size={32} />}
                   </div>
-                  
-                  <h3 className="text-slate-800 font-black text-xl mb-2">
-                    {activeTab === 'all' ? 'No Recipes Found' : 'Nothing here yet'}
-                  </h3>
-                  
-                  <p className="text-slate-400 text-sm mb-8 max-w-xs mx-auto font-medium">
-                    {activeTab === 'all' 
-                      ? 'Try adding more ingredients to your pantry or changing your search terms.' 
-                      : `You haven't added any recipes to your ${activeTab} collection yet.`}
-                  </p>
-
-                  <button 
-                    onClick={() => setActiveTab(activeTab === 'all' ? 'pantry' : 'all')} 
-                    className="group flex items-center gap-3 bg-slate-900 text-white px-8 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-orange-500 transition-all shadow-lg active:scale-95"
-                  >
+                  <h3 className="text-slate-800 font-black text-xl mb-2">{activeTab === 'all' ? 'No Recipes Found' : 'Nothing here yet'}</h3>
+                  <button onClick={() => setActiveTab(activeTab === 'all' ? 'pantry' : 'all')} className="group flex items-center gap-3 bg-slate-900 text-white px-8 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-orange-500 transition-all shadow-lg active:scale-95">
                     {activeTab === 'all' ? 'Manage Pantry' : 'Discover Recipes'}
                     <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                   </button>
@@ -190,28 +170,87 @@ const HomeView = ({
           <MobileNavButton active={activeTab === 'tried'} onClick={() => setActiveTab('tried')} icon={<ChefHat size={20} />} badge={tried.length} />
           <MobileNavButton active={activeTab === 'favorites'} onClick={() => setActiveTab('favorites')} icon={<Heart size={20} />} badge={favorites.length} />
           <MobileNavButton active={activeTab === 'market'} onClick={() => setActiveTab('market')} icon={<ShoppingCart size={20} />} badge={shoppingList.length} />
-          <button onClick={() => setShowLangPicker(true)} className="p-3 text-slate-300 hover:text-orange-500 transition-colors">
-            <Globe size={20} />
-          </button>
+          <MobileNavButton active={showSettings} onClick={() => setShowSettings(true)} icon={<Settings size={20} />} />
         </nav>
       </main>
 
-      {/* --- LANGUAGE MODAL --- */}
-      {showLangPicker && (
+      {/* --- MASTER SETTINGS MODAL --- */}
+      {showSettings && (
         <div className="fixed inset-0 z-100 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200">
-          <div className="bg-white w-full max-w-sm rounded-4xl p-6 shadow-2xl overflow-hidden">
+          <div className="bg-white w-full max-w-sm rounded-[40px] p-6 shadow-2xl">
+            <div className="flex justify-between items-center mb-8">
+              <h2 className="text-xl font-black">Settings</h2>
+              <button onClick={() => setShowSettings(false)} className="p-2 hover:bg-slate-100 rounded-full"><X size={20} /></button>
+            </div>
+            
+            <div className="space-y-4">
+              <button 
+                onClick={() => { setShowLangPicker(true); setShowSettings(false); }}
+                className="w-full p-5 flex items-center justify-between bg-slate-50 rounded-2xl group hover:bg-orange-50 transition-colors"
+              >
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-orange-500 shadow-sm group-hover:bg-orange-500 group-hover:text-white transition-all">
+                    <Globe size={20} />
+                  </div>
+                  <div className="text-left">
+                    <p className="font-black text-sm text-slate-800 tracking-tight">App Language</p>
+                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">{allLanguages.find(l => l.code === lang)?.name}</p>
+                  </div>
+                </div>
+                <ChevronRight size={18} className="text-slate-300" />
+              </button>
+
+              <button 
+                onClick={() => { setShowShareModal(true); setShowSettings(false); }}
+                className="w-full p-5 flex items-center justify-between bg-slate-50 rounded-2xl group hover:bg-orange-50 transition-colors"
+              >
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-orange-500 shadow-sm group-hover:bg-orange-500 group-hover:text-white transition-all">
+                    <Share2 size={20} />
+                  </div>
+                  <div className="text-left">
+                    <p className="font-black text-sm text-slate-800 tracking-tight">Invite Friends</p>
+                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Share QR or Link</p>
+                  </div>
+                </div>
+                <ChevronRight size={18} className="text-slate-300" />
+              </button>
+
+              <button 
+                onClick={() => { setShowAbout(true); setShowSettings(false); }}
+                className="w-full p-5 flex items-center justify-between bg-slate-50 rounded-2xl group hover:bg-orange-50 transition-colors"
+              >
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-orange-500 shadow-sm group-hover:bg-orange-500 group-hover:text-white transition-all">
+                    <ChefHat size={20} />
+                  </div>
+                  <div className="text-left">
+                    <p className="font-black text-sm text-slate-800 tracking-tight">About Pantry Guide</p>
+                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Our Mission & Dev</p>
+                  </div>
+                </div>
+                <ChevronRight size={18} className="text-slate-300" />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Sub-Modals */}
+      {showLangPicker && (
+        <div className="fixed inset-0 z-110 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white w-full max-w-sm rounded-4xl p-6 shadow-2xl">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-black tracking-tight">Language</h2>
-              <button onClick={() => setShowLangPicker(false)} className="p-2 hover:bg-slate-100 rounded-full transition-colors"><X size={20} /></button>
+              <button onClick={() => { setShowLangPicker(false); setShowSettings(true); }} className="text-slate-400 hover:text-slate-900 flex items-center gap-1 text-[10px] font-black uppercase tracking-widest">
+                 Back
+              </button>
+              <h2 className="text-xl font-black">Language</h2>
+              <button onClick={() => setShowLangPicker(false)}><X size={20} /></button>
             </div>
             <div className="max-h-80 overflow-y-auto space-y-2 pr-2 custom-scrollbar">
               {allLanguages.map(l => (
-                <button 
-                  key={l.code} 
-                  onClick={() => { setLang(l.code); setShowLangPicker(false); }} 
-                  className={`w-full p-4 flex items-center justify-between rounded-2xl border transition-all ${lang === l.code ? 'border-orange-500 bg-orange-50' : 'border-slate-100 hover:border-orange-200'}`}
-                >
-                  <span className="font-bold text-slate-700">{l.flag} <span className="ml-2">{l.name}</span></span>
+                <button key={l.code} onClick={() => { setLang(l.code); setShowLangPicker(false); }} className={`w-full p-4 flex items-center justify-between rounded-2xl border ${lang === l.code ? 'border-orange-500 bg-orange-50' : 'border-slate-100'}`}>
+                  <span className="font-bold">{l.flag} {l.name}</span>
                   {lang === l.code && <Check size={18} className="text-orange-600" />}
                 </button>
               ))}
@@ -219,6 +258,9 @@ const HomeView = ({
           </div>
         </div>
       )}
+
+      <ShareModal isOpen={showShareModal} onClose={() => setShowShareModal(false)} />
+      <AboutModal isOpen={showAbout} onClose={() => setShowAbout(false)} />
     </div>
   );
 };
