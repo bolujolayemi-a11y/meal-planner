@@ -31,7 +31,6 @@ export const pantryCategories = [
       'wheat swallow',   // Added specifically
       'semolina swallow', // Added specifically
       'starch', 
-      'wheat meal'
     ]
   },
   {
@@ -62,7 +61,7 @@ export const pantryCategories = [
     id: 'fruits',
     label: 'Fresh Fruits',
     icon: '🍎',
-    items: ['plantain', 'banana', 'ube', 'mango', 'orange', 'lemon', 'lime', 'pineapple', 'apple', 'avocado', 'watermelon', 'papaya']
+    items: ['plantain', 'banana', 'aubergine', 'mango', 'orange', 'lemon', 'lime', 'pineapple', 'apple', 'avocado', 'watermelon', 'papaya']
   },
   {
     id: 'berries',

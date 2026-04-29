@@ -23,12 +23,24 @@ import amalaImg from './assets/amala.jpeg';
 import wheatImg from './assets/wheat-swallow.jpeg';
 import semoImg from './assets/semolina.jpeg';
 import loadedFriesImg from './assets/loaded-fries.jpeg';
+import catfishImg from './assets/catfish-peppersoup.jpeg'; 
+import noodlesImg from './assets/noodles.jpeg';
+import ikokoreImg from './assets/ikokore.jpeg';
+import eweduImg from './assets/ewedu.jpeg';
+import gbegiriImg from './assets/gbegiri.jpeg';
+import ebaImg from './assets/eba.jpeg';
+import fufuImg from './assets/fufu.jpeg';
+import starchImg from './assets/starch.jpeg';
+import seafoodBoil from './assets/seafood-boil.jpeg';
+
 
 export const nigerianRecipes = [
   {
     id: "ng-jollof",
     name: "Classic Nigerian Jollof Rice",
     image: jollofImg,
+    servings: 4,
+    nutrition: { calories: 450, protein: "12g", fat: "14g", carbs: "68g" },
     ingredients: [
       { item: "rice", quantity: 0.75, unit: "cup" },
       { item: "tomato", quantity: 1, unit: "medium" },
@@ -54,6 +66,8 @@ export const nigerianRecipes = [
     id: "ng-egusi",
     name: "Egusi Soup",
     image: egusisoupImg,
+    servings: 4,
+    nutrition: { calories: 480, protein: "28g", fat: "35g", carbs: "12g" },
     ingredients: [
       { item: "egusi", quantity: 0.5, unit: "cup" },
       { item: "palm oil", quantity: 1.5, unit: "tbsp" },
@@ -76,6 +90,8 @@ export const nigerianRecipes = [
     id: "ng-ayamase",
     name: "Ayamase Sauce",
     image: ayamase, 
+    servings: 3,
+    nutrition: { calories: 550, protein: "20g", fat: "48g", carbs: "10g" },
     ingredients: [
       { item: "green bell pepper", quantity: 2, unit: "large" },
       { item: "scotch bonnet", quantity: 2, unit: "pieces" },
@@ -93,50 +109,11 @@ export const nigerianRecipes = [
     ]
   },
   {
-    id: "ng-moimoi",
-    name: "Steamed Bean Pudding (Moi-Moi)",
-    image: moiMoi,
-    ingredients: [
-      { item: "beans", quantity: 1, unit: "cup" },
-      { item: "red bell pepper", quantity: 1, unit: "medium" },
-      { item: "vegetable oil", quantity: 3, unit: "tbsp" },
-      { item: "crayfish", quantity: 1, unit: "tbsp" },
-      { item: "boiled egg", quantity: 1, unit: "piece" }
-    ],
-    steps: [
-      { number: 1, step: "Soak beans for 5 minutes, then rub between palms to remove the skins. Rinse until the beans are clean and white." },
-      { number: 2, step: "Blend the beans with the red pepper and onion using very little water until the paste is extremely smooth." },
-      { number: 3, step: "Pour the paste into a bowl. Add oil, salt, and crayfish. Use a wooden spoon to whisk the mixture for 5 minutes to incorporate air for fluffiness." },
-      { number: 4, step: "Pour the mixture into small greased containers or leaves. Add a slice of boiled egg to each." },
-      { number: 5, step: "Place a steamer or a few stalks of leaf in a pot with a little water. Arrange the containers inside. Steam for 45 minutes, adding water to the pot if it dries up." }
-    ]
-  },
-  {
-    id: "ng-friedrice",
-    name: "Nigerian Fried Rice",
-    image: friedriceImg,
-    ingredients: [
-      { item: "rice", quantity: 0.75, unit: "cup" },
-      { item: "carrot", quantity: 1, unit: "small" },
-      { item: "green beans", quantity: 0.25, unit: "cup" },
-      { item: "liver", quantity: 50, unit: "g" },
-      { item: "curry powder", quantity: 1, unit: "tsp" },
-      { item: "turmeric", quantity: 0.25, unit: "tsp" },
-      { item: "sweet corn", quantity: 2, unit: "tbsp" },
-      { item: "vegetable oil", quantity: 2, unit: "tbsp" }
-    ],
-    steps: [
-      { number: 1, step: "Wash the rice and parboil it in a pot with curry powder, turmeric, and a little salt until it is 80% cooked (still has a slight bite). Drain and set aside." },
-      { number: 2, step: "Dice the carrots, green beans, and liver into very small, uniform cubes. Boil the liver separately with salt until firm before dicing." },
-      { number: 3, step: "Heat 1 tablespoon of oil in a wide pan. Stir-fry the diced liver and vegetables on high heat for 3 minutes. Add the sweet corn at the end." },
-      { number: 4, step: "Add the remaining oil to the pan. Add the parboiled rice in small batches, tossing and stirring constantly so the rice fries and absorbs the vegetable flavors." },
-      { number: 5, step: "Adjust seasoning with salt or bouillon and serve once the rice is fully tender and steaming." }
-    ]
-  },
-  {
     id: "ng-afang",
     name: "Authentic Afang Soup",
     image: afangsoupImg,
+    servings: 4,
+    nutrition: { calories: 410, protein: "25g", fat: "30g", carbs: "8g" },
     ingredients: [
       { item: "afang leaf", quantity: 0.5, unit: "cup" },
       { item: "ugwu", quantity: 1, unit: "cup" },
@@ -158,6 +135,8 @@ export const nigerianRecipes = [
     id: "ng-oha",
     name: "Traditional Oha Soup",
     image: ohasoupImg,
+    servings: 4,
+    nutrition: { calories: 360, protein: "18g", fat: "25g", carbs: "15g" },
     ingredients: [
       { item: "oha leaf", quantity: 0.5, unit: "bunch" },
       { item: "cocoyam", quantity: 2, unit: "small tubers" },
@@ -176,9 +155,56 @@ export const nigerianRecipes = [
     ]
   },
   {
+    id: "ng-moimoi",
+    name: "Steamed Bean Pudding (Moi-Moi)",
+    image: moiMoi,
+    servings: 4,
+    nutrition: { calories: 210, protein: "14g", fat: "9g", carbs: "22g" },
+    ingredients: [
+      { item: "beans", quantity: 1, unit: "cup" },
+      { item: "red bell pepper", quantity: 1, unit: "medium" },
+      { item: "vegetable oil", quantity: 3, unit: "tbsp" },
+      { item: "crayfish", quantity: 1, unit: "tbsp" },
+      { item: "boiled egg", quantity: 1, unit: "piece" }
+    ],
+    steps: [
+      { number: 1, step: "Soak beans for 5 minutes, then rub between palms to remove the skins. Rinse until the beans are clean and white." },
+      { number: 2, step: "Blend the beans with the red pepper and onion using very little water until the paste is extremely smooth." },
+      { number: 3, step: "Pour the paste into a bowl. Add oil, salt, and crayfish. Use a wooden spoon to whisk the mixture for 5 minutes to incorporate air for fluffiness." },
+      { number: 4, step: "Pour the mixture into small greased containers or leaves. Add a slice of boiled egg to each." },
+      { number: 5, step: "Place a steamer or a few stalks of leaf in a pot with a little water. Arrange the containers inside. Steam for 45 minutes, adding water to the pot if it dries up." }
+    ]
+  },
+  {
+    id: "ng-friedrice",
+    name: "Nigerian Fried Rice",
+    image: friedriceImg,
+    servings: 4,
+    nutrition: { calories: 390, protein: "14g", fat: "11g", carbs: "60g" },
+    ingredients: [
+      { item: "rice", quantity: 0.75, unit: "cup" },
+      { item: "carrot", quantity: 1, unit: "small" },
+      { item: "green beans", quantity: 0.25, unit: "cup" },
+      { item: "liver", quantity: 50, unit: "g" },
+      { item: "curry powder", quantity: 1, unit: "tsp" },
+      { item: "turmeric", quantity: 0.25, unit: "tsp" },
+      { item: "sweet corn", quantity: 2, unit: "tbsp" },
+      { item: "vegetable oil", quantity: 2, unit: "tbsp" }
+    ],
+    steps: [
+      { number: 1, step: "Wash the rice and parboil it in a pot with curry powder, turmeric, and a little salt until it is 80% cooked (still has a slight bite). Drain and set aside." },
+      { number: 2, step: "Dice the carrots, green beans, and liver into very small, uniform cubes. Boil the liver separately with salt until firm before dicing." },
+      { number: 3, step: "Heat 1 tablespoon of oil in a wide pan. Stir-fry the diced liver and vegetables on high heat for 3 minutes. Add the sweet corn at the end." },
+      { number: 4, step: "Add the remaining oil to the pan. Add the parboiled rice in small batches, tossing and stirring constantly so the rice fries and absorbs the vegetable flavors." },
+      { number: 5, step: "Adjust seasoning with salt or bouillon and serve once the rice is fully tender and steaming." }
+    ]
+  },
+  {
     id: "ng-asaro",
     name: "Asaro (Yam Porridge)",
     image: asaro,
+    servings: 3,
+    nutrition: { calories: 340, protein: "9g", fat: "16g", carbs: "45g" },
     ingredients: [
       { item: "yam", quantity: 250, unit: "g" },
       { item: "palm oil", quantity: 2, unit: "tbsp" },
@@ -199,6 +225,8 @@ export const nigerianRecipes = [
     id: "ng-pounded-yam",
     name: "Pounded Yam",
     image: poundedYam,
+    servings: 2,
+    nutrition: { calories: 310, protein: "4g", fat: "0.4g", carbs: "74g" },
     ingredients: [
       { item: "yam", quantity: 300, unit: "g" },
       { item: "water", quantity: 1, unit: "cup" }
@@ -215,6 +243,8 @@ export const nigerianRecipes = [
     id: "ng-ewa-agoyin",
     name: "Ewa Agoyin",
     image: ewaAgoyin,
+    servings: 3,
+    nutrition: { calories: 420, protein: "18g", fat: "22g", carbs: "42g" },
     ingredients: [
       { item: "beans", quantity: 0.75, unit: "cup" },
       { item: "palm oil", quantity: 0.25, unit: "cup" },
@@ -234,6 +264,8 @@ export const nigerianRecipes = [
     id: "ng-sweet-potato-fries",
     name: "Sweet Potato Fries",
     image: potatoFries,
+    servings: 2,
+    nutrition: { calories: 280, protein: "3g", fat: "14g", carbs: "38g" },
     ingredients: [
       { item: "sweet potato", quantity: 2, unit: "medium" },
       { item: "vegetable oil", quantity: 1, unit: "cup" },
@@ -251,6 +283,8 @@ export const nigerianRecipes = [
     id: "ng-loaded-fries",
     name: "Loaded Fries",
     image: loadedFriesImg,
+    servings: 2,
+    nutrition: { calories: 510, protein: "22g", fat: "28g", carbs: "42g" },
     ingredients: [
       { item: "potato", quantity: 2, unit: "medium" },
       { item: "beef", quantity: 100, unit: "g" },
@@ -271,6 +305,8 @@ export const nigerianRecipes = [
     id: "ng-akara",
     name: "Akara (Bean Cakes)",
     image: akaraImg,
+    servings: 4,
+    nutrition: { calories: 240, protein: "12g", fat: "12g", carbs: "20g" },
     ingredients: [
       { item: "beans", quantity: 1, unit: "cup" },
       { item: "onion", quantity: 0.5, unit: "medium" },
@@ -289,6 +325,8 @@ export const nigerianRecipes = [
     id: "ng-amala",
     name: "Amala (Yam Flour Swallow)",
     image: amalaImg,
+    servings: 2,
+    nutrition: { calories: 290, protein: "3g", fat: "0.5g", carbs: "70g" },
     ingredients: [
       { item: "yam flour", quantity: 1, unit: "cup" },
       { item: "water", quantity: 2, unit: "cups" }
@@ -305,6 +343,8 @@ export const nigerianRecipes = [
     id: "ng-wheat",
     name: "Wheat Swallow",
     image: wheatImg,
+    servings: 2,
+    nutrition: { calories: 320, protein: "11g", fat: "2g", carbs: "65g" },
     ingredients: [
       { item: "wheat flour", quantity: 1, unit: "cup" },
       { item: "water", quantity: 1.5, unit: "cups" }
@@ -321,6 +361,8 @@ export const nigerianRecipes = [
     id: "ng-semo",
     name: "Semolina Swallow",
     image: semoImg,
+    servings: 2,
+    nutrition: { calories: 340, protein: "10g", fat: "1g", carbs: "72g" },
     ingredients: [
       { item: "semolina", quantity: 1, unit: "cup" },
       { item: "water", quantity: 2, unit: "cups" }
@@ -331,6 +373,238 @@ export const nigerianRecipes = [
       { number: 3, step: "Gradually add the dry semolina into the pot while stirring vigorously." },
       { number: 4, step: "Cover and allow to cook for 5 minutes on low heat." },
       { number: 5, step: "Stir one last time until firm and smooth." }
+    ]
+  },
+  {
+    id: "ng-ofada",
+    name: "Ofada Rice",
+    image: ofada,
+    servings: 2,
+    nutrition: { calories: 360, protein: "7g", fat: "2g", carbs: "78g" },
+    ingredients: [
+      { item: "ofada rice", quantity: 1, unit: "cup" },
+      { item: "water", quantity: 2.5, unit: "cups" },
+      { item: "salt", quantity: 0.5, unit: "tsp" }
+    ],
+    steps: [
+      { number: 1, step: "Pick the Ofada rice carefully to remove stones and dirt." },
+      { number: 2, step: "Wash the rice repeatedly in cold water until the water is clear." },
+      { number: 3, step: "Boil the rice with plenty of water for 10 minutes, then drain and rinse again (this removes the pungent smell if desired)." },
+      { number: 4, step: "Add fresh water and salt, then cook on medium heat until the rice is soft and the water is fully absorbed." },
+      { number: 5, step: "Serve traditionally on a broad Uma leaf." }
+    ]
+  },
+  {
+    id: "ng-ikokore",
+    name: "Ikokore (Water Yam Porridge)",
+    image: ikokoreImg,
+    servings: 3,
+    nutrition: { calories: 380, protein: "12g", fat: "18g", carbs: "52g" },
+    ingredients: [
+      { item: "water yam", quantity: 400, unit: "g" },
+      { item: "palm oil", quantity: 3, unit: "tbsp" },
+      { item: "beef stock", quantity: 1, unit: "cup" },
+      { item: "dried fish", quantity: 1, unit: "piece" },
+      { item: "crayfish", quantity: 2, unit: "tbsp" },
+      { item: "scotch bonnet", quantity: 2, unit: "pieces" }
+    ],
+    steps: [
+      { number: 1, step: "Peel and grate the water yam into a smooth paste. Add a pinch of salt to the paste and mix." },
+      { number: 2, step: "Heat the beef stock and palm oil in a pot. Add the blended pepper, crayfish, and dried fish." },
+      { number: 3, step: "Once the base is boiling, scoop the grated water yam in small lumps into the pot." },
+      { number: 4, step: "Do not stir immediately. Cover and allow to cook for 10 minutes so the lumps set." },
+      { number: 5, step: "Lower the heat, stir gently to break up some lumps and thicken the sauce, then simmer for 5 more minutes." }
+    ]
+  },
+  {
+    id: "ng-gbegiri",
+    name: "Gbegiri (Bean Soup)",
+    image: gbegiriImg,
+    servings: 3,
+    nutrition: { calories: 290, protein: "15g", fat: "16g", carbs: "24g" },
+    ingredients: [
+      { item: "beans", quantity: 0.5, unit: "cup" },
+      { item: "palm oil", quantity: 1, unit: "tbsp" },
+      { item: "iru", quantity: 0.5, unit: "tbsp" },
+      { item: "dried fish", quantity: 0.5, unit: "piece" },
+      { item: "potash", quantity: 1, unit: "small pinch" }
+    ],
+    steps: [
+      { number: 1, step: "Peel the beans and boil with potash until they are extremely soft and literally falling apart." },
+      { number: 2, step: "Use a local broom (ijabe) or a blender to blend the beans into a very smooth, watery paste." },
+      { number: 3, step: "Pour the paste back into a pot. Add palm oil, iru, salt, and dried fish." },
+      { number: 4, step: "Cook on low heat, stirring constantly to prevent burning, until the oil integrates and the soup turns bright yellow/orange." }
+    ]
+  },
+  {
+    id: "ng-catfish-peppersoup",
+    name: "Catfish Peppersoup",
+    image: catfishImg, 
+    servings: 2,
+    nutrition: { calories: 320, protein: "38g", fat: "15g", carbs: "6g" },
+    ingredients: [
+      { item: "catfish", quantity: 1, unit: "medium" },
+      { item: "peppersoup spice", quantity: 1, unit: "tbsp" },
+      { item: "scent leaf", quantity: 5, unit: "leaves" },
+      { item: "scotch bonnet", quantity: 2, unit: "pieces" },
+      { item: "crayfish", quantity: 1, unit: "tbsp" }
+    ],
+    steps: [
+      { number: 1, step: "Wash the catfish with salt or lime to remove the slime. Pour hot water over the pieces to toughen the skin so it doesn't break during cooking." },
+      { number: 2, step: "Place the fish in a pot. Add enough water to cover it halfway." },
+      { number: 3, step: "Add ground pepper, peppersoup spices, crayfish, and salt." },
+      { number: 4, step: "Cook for 10-15 minutes on medium heat. Be careful not to stir too much so the fish stays whole." },
+      { number: 5, step: "Add the shredded scent leaves 2 minutes before turning off the heat." }
+    ]
+  },
+  {
+    id: "ng-chicken-shawarma",
+    name: "Classic Chicken Shawarma",
+    image: chickenshawarmaImg,
+    servings: 2,
+    nutrition: { calories: 580, protein: "32g", fat: "24g", carbs: "54g" },
+    ingredients: [
+      { item: "chicken", quantity: 300, unit: "g" },
+      { item: "shawarma bread", quantity: 2, unit: "pieces" },
+      { item: "cabbage", quantity: 0.5, unit: "cup" },
+      { item: "carrot", quantity: 0.5, unit: "medium" },
+      { item: "mayonnaise", quantity: 2, unit: "tbsp" },
+      { item: "ketchup", quantity: 1, unit: "tbsp" },
+      { item: "sausage", quantity: 2, unit: "pieces" },
+      { item: "cayenne pepper", quantity: 0.5, unit: "tsp" },
+      { item: "curry powder", quantity: 0.25, unit: "tsp" },
+      { item: "vegetable oil", quantity: 1, unit: "tbsp" }
+    ],
+    steps: [
+      { number: 1, step: "Debone the chicken and cut into thin strips. Marinate with salt, bouillon cubes, curry, and cayenne pepper for at least 30 minutes." },
+      { number: 2, step: "Heat vegetable oil in a pan and stir-fry the marinated chicken strips until cooked through and slightly browned. Pan-fry the sausages as well." },
+      { number: 3, step: "Finely shred the cabbage and grate the carrots. Mix the mayonnaise and ketchup in a small bowl to create the shawarma spread." },
+      { number: 4, step: "Lay the shawarma bread flat. Spread a generous amount of the mayo-ketchup mix over the surface." },
+      { number: 5, step: "Place a portion of the chicken, vegetables, and a whole sausage at one edge of the bread." },
+      { number: 6, step: "Roll the bread tightly, tucking in the edges. Lightly toast the wrap in a dry pan or a sandwich press for 2 minutes until crispy." }
+    ]
+  },
+  {
+    id: "ng-ewedu",
+    name: "Ewedu Soup",
+    image: eweduImg,
+    servings: 3,
+    nutrition: { calories: 120, protein: "4g", fat: "6g", carbs: "14g" },
+    ingredients: [
+      { item: "ewedu leaf", quantity: 1, unit: "bunch" },
+      { item: "iru", quantity: 0.5, unit: "tbsp" },
+      { item: "crayfish", quantity: 1, unit: "tbsp" },
+      { item: "potash", quantity: 1, unit: "small pinch" }
+    ],
+    steps: [
+      { number: 1, step: "Pick the Ewedu leaves and wash them thoroughly." },
+      { number: 2, step: "Boil a small amount of water with potash. Add the leaves and cook until soft." },
+      { number: 3, step: "Use an Ewedu broom (ijabe) or a blender (pulse for 2 seconds) to break the leaves into a slimy consistency." },
+      { number: 4, step: "Add iru, crayfish, and a little salt. Heat for 1 minute—do not cover the pot or the soup will lose its green color and 'draw'." }
+    ]
+  },
+  {
+    id: "ng-noodles",
+    name: "Naija Style Stir-fry Noodles",
+    image: noodlesImg, 
+    servings: 2,
+    nutrition: { calories: 480, protein: "14g", fat: "22g", carbs: "56g" },
+    ingredients: [
+      { item: "noodles", quantity: 2, unit: "packs" },
+      { item: "carrot", quantity: 0.5, unit: "medium" },
+      { item: "green bell pepper", quantity: 0.5, unit: "medium" },
+      { item: "egg", quantity: 2, unit: "large" },
+      { item: "onion", quantity: 0.25, unit: "medium" },
+      { item: "vegetable oil", quantity: 1, unit: "tbsp" }
+    ],
+    steps: [
+      { number: 1, step: "Boil the noodles in water for 2-3 minutes without the seasoning until almost soft; drain and set aside." },
+      { number: 2, step: "Heat oil in a pan. Sauté sliced onions, carrots, and peppers for 2 minutes." },
+      { number: 3, step: "Push the vegetables to the side and scramble the eggs in the same pan." },
+      { number: 4, step: "Add the drained noodles and the noodle seasoning packets." },
+      { number: 5, step: "Toss everything together on high heat for 1-2 minutes until well combined and slightly charred." }
+    ]
+  },
+  {
+    id: "ng-fufu",
+    name: "Fufu (Cassava Swallow)",
+    image: fufuImg,
+    servings: 2,
+    nutrition: { calories: 330, protein: "2g", fat: "0.5g", carbs: "78g" },
+    ingredients: [
+      { item: "cassava", quantity: 500, unit: "g" },
+      { item: "water", quantity: 2, unit: "cups" }
+    ],
+    steps: [
+      { number: 1, step: "Peel and soak the cassava in water for 3-5 days to ferment until the tubers are very soft to the touch." },
+      { number: 2, step: "Sieve the fermented cassava to remove fibers and starch liquid; allow the thick paste to settle and drain excess water." },
+      { number: 3, step: "Place the paste in a heavy-bottomed pot and stir constantly on medium heat with a wooden spatula." },
+      { number: 4, step: "As it thickens and turns from white to off-white/translucent, add a little water and cover to steam for 5 minutes." },
+      { number: 5, step: "Pound or stir vigorously until it is smooth, stretchy, and free of lumps." }
+    ]
+  },
+  {
+    id: "ng-eba",
+    name: "Eba (Garri)",
+    image: ebaImg,
+    servings: 2,
+    nutrition: { calories: 300, protein: "1.5g", fat: "0.4g", carbs: "72g" },
+    ingredients: [
+      { item: "garri", quantity: 1, unit: "cup" },
+      { item: "water", quantity: 1.5, unit: "cups" }
+    ],
+    steps: [
+      { number: 1, step: "Boil water until it reaches a rolling boil." },
+      { number: 2, step: "Pour the hot water into a bowl, then slowly sprinkle the garri into the water until it covers the surface." },
+      { number: 3, step: "Do not stir immediately; cover the bowl for 2 minutes to allow the garri grains to swell and absorb the water." },
+      { number: 4, step: "Use a wooden spatula to stir and mash the garri together until it forms a firm, smooth dough." },
+      { number: 5, step: "Adjust the firmness by adding a little more hot water if it's too stiff, then mold into a ball." }
+    ]
+  },
+  {
+    id: "ng-starch",
+    name: "Starch (Usi)",
+    image: starchImg,
+    servings: 2,
+    nutrition: { calories: 350, protein: "1g", fat: "7g", carbs: "70g" },
+    ingredients: [
+      { item: "cassava starch", quantity: 1, unit: "cup" },
+      { item: "palm oil", quantity: 1, unit: "tsp" },
+      { item: "water", quantity: 1.5, unit: "cups" }
+    ],
+    steps: [
+      { number: 1, step: "Dissolve the raw cassava starch in a bowl of room-temperature water until there are no lumps." },
+      { number: 2, step: "Add the teaspoon of palm oil to the mixture—this gives it the traditional yellow color and prevents sticking." },
+      { number: 3, step: "Pour the mixture into a clean pot or frying pan on medium heat." },
+      { number: 4, step: "Stir continuously in one direction. The liquid will begin to thicken and turn into a solid, stretchy mass." },
+      { number: 5, step: "Keep 'folding' the starch with your spatula until the color is uniform and it becomes very translucent and rubbery." }
+    ]
+  },
+  {
+    id: "ng-seafood-boil",
+    name: "Spicy Seafood Boil",
+    image: seafoodBoil,
+    servings: 3,
+    nutrition: { calories: 650, protein: "45g", fat: "32g", carbs: "48g" },
+    ingredients: [
+      { item: "prawns", quantity: 200, unit: "g" },
+      { item: "crab", quantity: 2, unit: "pieces" },
+      { item: "corn", quantity: 2, unit: "cobs" },
+      { item: "sausage", quantity: 3, unit: "pieces" },
+      { item: "potato", quantity: 2, unit: "medium" },
+      { item: "butter", quantity: 0.5, unit: "cup" },
+      { item: "garlic", quantity: 1, unit: "bulb" },
+      { item: "onion", quantity: 0.5, unit: "medium" },
+      { item: "lemon", quantity: 1, unit: "piece" },
+      { item: "scotch bonnet", quantity: 2, unit: "pieces" }
+    ],
+    steps: [
+      { number: 1, step: "Cut the corn into thirds and the potatoes into halves. Boil them in a large pot of salted water until the potatoes are tender (about 10-12 minutes)." },
+      { number: 2, step: "Add the cleaned crabs and sausages to the boiling water. Cook for 5 minutes, then add the prawns and cook for an additional 2-3 minutes until they turn pink. Drain everything and set aside." },
+      { number: 3, step: "In a wide pan or wok, melt the butter on low heat. Add a generous amount of minced garlic and chopped onions; sauté until fragrant and soft." },
+      { number: 4, step: "Stir in your blended scotch bonnet, salt, and any dry spices (like paprika or ginger). Squeeze in the juice of one lemon." },
+      { number: 5, step: "Toss the boiled seafood, corn, potatoes, and sausages into the garlic butter sauce. Stir well to ensure everything is thoroughly coated in the spicy butter." },
+      { number: 6, step: "Serve hot, ideally poured out onto a platter for a communal dining experience." }
     ]
   }
 ];
