@@ -132,6 +132,32 @@ export const nigerianRecipes = [
     ]
   },
   {
+    id: "ng-fisherman-soup",
+    name: "Fisherman Soup",
+    image: fishermanSoup,
+    servings: 4,
+    nutrition: { calories: 310, protein: "35g", fat: "15g", carbs: "8g" },
+    ingredients: [
+      { item: "catfish", quantity: 1, unit: "medium" },
+      { item: "prawns", quantity: 200, unit: "g" },
+      { item: "crab", quantity: 2, unit: "pieces" },
+      { item: "palm oil", quantity: 2, unit: "tbsp" },
+      { item: "cocoyam", quantity: 2, unit: "small tubers" },
+      { item: "scent leaf", quantity: 5, unit: "leaves" },
+      { item: "crayfish", quantity: 2, unit: "tbsp" },
+      { item: "periwinkle", quantity: 0.5, unit: "cup" },
+      { item: "scotch bonnet", quantity: 2, unit: "pieces" }
+    ],
+    steps: [
+      { number: 1, step: "Boil the cocoyam with their skins on until soft. Peel and pound them into a smooth paste to use as a thickener." },
+      { number: 2, step: "Clean the catfish with hot water or salt to remove slime. In a large pot, place the fish, crabs, and prawns with a little water and salt. Steam for 5 minutes." },
+      { number: 3, step: "Remove the steamed fish carefully and set aside so they don't break. To the remaining liquid, add palm oil, blended pepper, and ground crayfish." },
+      { number: 4, step: "Add the pounded cocoyam in small lumps to the boiling pot. Let it cook until the cocoyam dissolves and the soup thickens." },
+      { number: 5, step: "Add the periwinkles and return the fish, prawns, and crabs to the pot. Simmer on low heat for 3 minutes." },
+      { number: 6, step: "Stir in the shredded scent leaves, cook for 1 more minute, and turn off the heat immediately." }
+    ]
+  },
+  {
     id: "ng-oha",
     name: "Traditional Oha Soup",
     image: ohasoupImg,
@@ -364,13 +390,13 @@ export const nigerianRecipes = [
     servings: 2,
     nutrition: { calories: 340, protein: "10g", fat: "1g", carbs: "72g" },
     ingredients: [
-      { item: "semolina", quantity: 1, unit: "cup" },
+      { item: "semovita", quantity: 1, unit: "cup" },
       { item: "water", quantity: 2, unit: "cups" }
     ],
     steps: [
       { number: 1, step: "Bring water to a boil." },
-      { number: 2, step: "Mix a small amount of semolina with cold water to make a thin paste; pour this into the boiling water to create a base." },
-      { number: 3, step: "Gradually add the dry semolina into the pot while stirring vigorously." },
+      { number: 2, step: "Mix a small amount of semovita with cold water to make a thin paste; pour this into the boiling water to create a base." },
+      { number: 3, step: "Gradually add the dry semovita into the pot while stirring vigorously." },
       { number: 4, step: "Cover and allow to cook for 5 minutes on low heat." },
       { number: 5, step: "Stir one last time until firm and smooth." }
     ]

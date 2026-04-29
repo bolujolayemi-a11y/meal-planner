@@ -1,43 +1,34 @@
 // src/utils/ingredientMap.js
 
 export const ingredientAliases = {
-  // --- THE CASSAVA UMBRELLA (Parent -> Children) ---
-  // Tapping 'cassava' now looks for all these specific derivatives
-  'cassava': ['eba', 'garri', 'starch', 'cassava starch', 'fufu', 'cassava flour'],
-  
-  // --- NIGERIAN TRADITIONAL NAMES & SWALLOWS ---
+  // --- INDIVIDUAL SWALLOW LINKS ---
+  'eba': 'garri',
+  'garri': 'eba',
+  'fufu': 'cassava',
+  'starch': 'cassava starch',
+  'usi': 'starch',
+  'pounded yam': 'yam',
+  'asaro': 'yam',
+  'amala': 'yam flour',
+  'elubo': 'amala',
+  'yam flour': 'elubo',
+
+  // --- NIGERIAN TRADITIONAL NAMES ---
   'iru': 'locust beans',
   'locust beans': 'iru',
   'egusi': 'melon seed',
   'melon seed': 'egusi',
   'ata rodo': 'scotch bonnet',
   'scotch bonnet': 'ata rodo',
-  'habanero': 'chili',
   'crayfish': 'shrimp',
   'shrimp': 'prawns',
   'prawns': 'shrimp',
   'rice': 'ofada rice',
   'fish': 'catfish',
-  
-  // --- DERIVATIVE LINKS ---
-  'eba': 'garri',
-  'garri': 'eba',
-  'fufu': 'cassava',
-  'cassava flakes': 'garri',
-  'starch': 'cassava starch',
-  'usi': 'starch',
-
-  // --- THE YAM & TUBER FAMILY ---
-  'pounded yam': 'yam',
-  'asaro': 'yam',
-  'amala': 'yam flour',
-  'elubo': 'amala',
-  'yam flour': 'elubo',
-  'sweet potato': 'potato',
 
   // --- GRAINS & FLOURS ---
-  'semo': 'semolina',
-  'semolina swallow': 'semolina',
+  'semolina swallow': 'semovita',
+  // 'semolina swallow': 'semolina',
   'wheat swallow': 'wheat flour',
   'wheat meal': 'wheat flour',
   'tuwo shinkafa': 'rice',
@@ -51,8 +42,9 @@ export const ingredientAliases = {
   'scent leaf': 'basil',
   'plantain': 'banana',
   'scallions': 'spring onions',
+  'habanero': 'chili',
 
-  // --- PASTA & NOODLES (MealDB specific names) ---
+  // --- PASTA & NOODLES ---
   'pasta': 'penne',
   'macaroni': 'macaroni',
   'noodles': 'egg_noodles',
@@ -72,6 +64,7 @@ export const ingredientAliases = {
   'bell pepper': 'green_pepper',
   'chili': 'chili_powder',
   'cabbage': 'cabbage',
+  'sweet potato': 'potato',
 
   // --- DAIRY & ESSENTIALS ---
   'cream': 'heavy_cream',
@@ -88,18 +81,14 @@ export const ingredientAliases = {
 
 /**
  * Helper to get all versions of an ingredient name.
- * Updated to handle both single strings and arrays of aliases.
+ * Handles single string aliases.
  */
 export const getExpandedIngredients = (ingredientsList) => {
   return ingredientsList.flatMap(ing => {
     const lowerIng = ing.toLowerCase().trim();
     const alias = ingredientAliases[lowerIng];
     
-    if (Array.isArray(alias)) {
-      // If cassava maps to [eba, garri, starch], we search for all 4 words
-      return [lowerIng, ...alias];
-    }
-    
+    // Returns the original word and its alias if found
     return alias ? [lowerIng, alias] : [lowerIng];
   });
 };
