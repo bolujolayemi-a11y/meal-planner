@@ -1,3 +1,5 @@
+// src/utils/pantryCategories.js
+
 export const pantryCategories = [
   {
     id: 'essentials',
@@ -9,7 +11,7 @@ export const pantryCategories = [
     id: 'pasta',
     label: 'Pasta & Noodles',
     icon: '🍝',
-    items: ['pasta', 'spaghetti', 'macaroni', 'noodles', 'penne', 'fusilli', 'indomie', 'vermicelli']
+    items: ['pasta', 'spaghetti', 'macaroni', 'noodles', 'penne', 'fusilli', 'vermicelli']
   },
   {
     id: 'tubers',
@@ -21,7 +23,16 @@ export const pantryCategories = [
     id: 'swallow',
     label: 'Traditional Swallows',
     icon: '🥣',
-    items: ['garri', 'fufu', 'pounded yam', 'amala', 'starch', 'elubo', 'wheat meal']
+    items: [
+      'garri', 
+      'fufu', 
+      'pounded yam', 
+      'amala', 
+      'wheat swallow',   // Added specifically
+      'semolina swallow', // Added specifically
+      'starch', 
+      'wheat meal'
+    ]
   },
   {
     id: 'proteins',

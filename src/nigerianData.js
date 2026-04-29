@@ -18,6 +18,11 @@ import poundedYam from './assets/pounded-yam.jpeg';
 import fishermanSoup from './assets/fisherman-soup.jpeg';
 import ewaAgoyin from './assets/ewa-agoyin.jpeg';
 import fishStew from './assets/fish-stew.jpeg';
+import akaraImg from './assets/akara.jpeg';
+import amalaImg from './assets/amala.jpeg';
+import wheatImg from './assets/wheat-swallow.jpeg';
+import semoImg from './assets/semolina.jpeg';
+import loadedFriesImg from './assets/loaded-fries.jpeg';
 
 export const nigerianRecipes = [
   {
@@ -192,7 +197,7 @@ export const nigerianRecipes = [
   },
   {
     id: "ng-pounded-yam",
-    name: "Smooth Pounded Yam",
+    name: "Pounded Yam",
     image: poundedYam,
     ingredients: [
       { item: "yam", quantity: 300, unit: "g" },
@@ -208,7 +213,7 @@ export const nigerianRecipes = [
   },
   {
     id: "ng-ewa-agoyin",
-    name: "Ewa Agoyin (Mushy Beans)",
+    name: "Ewa Agoyin",
     image: ewaAgoyin,
     ingredients: [
       { item: "beans", quantity: 0.75, unit: "cup" },
@@ -223,6 +228,109 @@ export const nigerianRecipes = [
       { number: 3, step: "Bleach the palm oil in a covered pot until it is dark but not smoking. Fry sliced onions until they are almost black." },
       { number: 4, step: "Add the pepper mix and fry on low heat for 20 minutes, stirring constantly. The sauce should turn very dark and look gritty." },
       { number: 5, step: "Mash the beans thoroughly and serve with a generous scoop of the dark Agoyin sauce." }
+    ]
+  },
+  {
+    id: "ng-sweet-potato-fries",
+    name: "Sweet Potato Fries",
+    image: potatoFries,
+    ingredients: [
+      { item: "sweet potato", quantity: 2, unit: "medium" },
+      { item: "vegetable oil", quantity: 1, unit: "cup" },
+      { item: "salt", quantity: 0.5, unit: "tsp" },
+      { item: "paprika", quantity: 0.25, unit: "tsp" }
+    ],
+    steps: [
+      { number: 1, step: "Peel the sweet potatoes and cut them into uniform long strips (batons)." },
+      { number: 2, step: "Soak the strips in cold water for 30 minutes to remove excess starch; pat them completely dry with a towel." },
+      { number: 3, step: "Heat oil in a deep pan. Fry the potatoes in small batches until the edges are golden brown and crispy." },
+      { number: 4, step: "Drain on paper towels and immediately sprinkle with salt and paprika while still hot." }
+    ]
+  },
+  {
+    id: "ng-loaded-fries",
+    name: "Loaded Fries",
+    image: loadedFriesImg,
+    ingredients: [
+      { item: "potato", quantity: 2, unit: "medium" },
+      { item: "beef", quantity: 100, unit: "g" },
+      { item: "cheese", quantity: 0.25, unit: "cup" },
+      { item: "mayonnaise", quantity: 1, unit: "tbsp" },
+      { item: "ketchup", quantity: 1, unit: "tbsp" },
+      { item: "onion", quantity: 0.25, unit: "medium" }
+    ],
+    steps: [
+      { number: 1, step: "Fry a batch of regular potato fries until crispy and set aside." },
+      { number: 2, step: "Mince the beef and sauté with onions, salt, and pepper until fully browned." },
+      { number: 3, step: "Place the fries on a heat-proof plate. Top with the cooked minced beef and shredded cheese." },
+      { number: 4, step: "Microwave or grill for 1 minute until the cheese melts." },
+      { number: 5, step: "Drizzle with mayonnaise and ketchup before serving." }
+    ]
+  },
+  {
+    id: "ng-akara",
+    name: "Akara (Bean Cakes)",
+    image: akaraImg,
+    ingredients: [
+      { item: "beans", quantity: 1, unit: "cup" },
+      { item: "onion", quantity: 0.5, unit: "medium" },
+      { item: "scotch bonnet", quantity: 2, unit: "pieces" },
+      { item: "vegetable oil", quantity: 1.5, unit: "cups" }
+    ],
+    steps: [
+      { number: 1, step: "Peel the beans by soaking and rubbing to remove skins. Wash until clean." },
+      { number: 2, step: "Blend beans with scotch bonnet and onion using the absolute minimum amount of water possible. The paste must be thick." },
+      { number: 3, step: "Pour paste into a bowl and whisk vigorously with a wooden spoon for 5-10 minutes to incorporate air." },
+      { number: 4, step: "Heat oil in a deep pan. Scoop the batter with a large spoon and drop into the hot oil." },
+      { number: 5, step: "Fry until golden brown on all sides, turning occasionally." }
+    ]
+  },
+  {
+    id: "ng-amala",
+    name: "Amala (Yam Flour Swallow)",
+    image: amalaImg,
+    ingredients: [
+      { item: "yam flour", quantity: 1, unit: "cup" },
+      { item: "water", quantity: 2, unit: "cups" }
+    ],
+    steps: [
+      { number: 1, step: "Bring water to a rolling boil in a small pot." },
+      { number: 2, step: "Turn the heat down to low. Gradually pour the yam flour (elubo) into the water." },
+      { number: 3, step: "Stir quickly and vigorously with a wooden spatula (omogun) to avoid lumps." },
+      { number: 4, step: "Add a little hot water, cover, and let it steam for 2 minutes." },
+      { number: 5, step: "Turn the heat off and continue to stir/knead until smooth and stretchy." }
+    ]
+  },
+  {
+    id: "ng-wheat",
+    name: "Wheat Swallow",
+    image: wheatImg,
+    ingredients: [
+      { item: "wheat flour", quantity: 1, unit: "cup" },
+      { item: "water", quantity: 1.5, unit: "cups" }
+    ],
+    steps: [
+      { number: 1, step: "Boil water in a pot." },
+      { number: 2, step: "Reduce heat and slowly add the whole wheat flour while stirring constantly." },
+      { number: 3, step: "Knead the mixture against the side of the pot until it forms a consistent dough." },
+      { number: 4, step: "Steam for 3 minutes with a tiny bit of water added to the pot." },
+      { number: 5, step: "Final kneading until smooth." }
+    ]
+  },
+  {
+    id: "ng-semo",
+    name: "Semolina Swallow",
+    image: semoImg,
+    ingredients: [
+      { item: "semolina", quantity: 1, unit: "cup" },
+      { item: "water", quantity: 2, unit: "cups" }
+    ],
+    steps: [
+      { number: 1, step: "Bring water to a boil." },
+      { number: 2, step: "Mix a small amount of semolina with cold water to make a thin paste; pour this into the boiling water to create a base." },
+      { number: 3, step: "Gradually add the dry semolina into the pot while stirring vigorously." },
+      { number: 4, step: "Cover and allow to cook for 5 minutes on low heat." },
+      { number: 5, step: "Stir one last time until firm and smooth." }
     ]
   }
 ];

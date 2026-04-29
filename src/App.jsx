@@ -5,13 +5,12 @@ import ForgotPassword from './pages/ForgotPassword';
 import RecipeDetails from './pages/RecipeDetails';
 import HomeView from './components/HomeView';
 import { nigerianRecipes } from './nigerianData';
+import { ingredientAliases } from './utils/ingredientMap'; 
 
 const App = () => {
   // --- AUTH & USER STATE ---
   const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('isLoggedIn') === 'true');
   const [userName, setUserName] = useState(localStorage.getItem('userName') || '');
-  
-  // --- GLOBAL LANGUAGE STATE ---
   const [lang, setLang] = useState(localStorage.getItem('user_lang') || 'en');
 
   // --- APP FUNCTIONAL STATE ---
@@ -33,7 +32,7 @@ const App = () => {
     return counts;
   }, []);
 
-  // --- COLLECTIONS & PERSISTENCE ---
+  // --- COLLECTIONS & USER-SPECIFIC PERSISTENCE ---
   const [shoppingList, setShoppingList] = useState(() => {
     const user = localStorage.getItem('userName') || 'guest';
     const saved = localStorage.getItem(`market_list_${user}`);
@@ -52,21 +51,19 @@ const App = () => {
     return saved ? JSON.parse(saved) : [];
   });
 
-  // NEW: Store full objects of saved API recipes so they show up offline/empty pantry
   const [apiCache, setApiCache] = useState(() => {
     const user = localStorage.getItem('userName') || 'guest';
     const saved = localStorage.getItem(`apiCache_${user}`);
     return saved ? JSON.parse(saved) : {};
   });
 
-  // --- USER-SPECIFIC SYNC ---
+  // --- SYNC TO LOCALSTORAGE ---
   useEffect(() => {
     const user = userName || 'guest';
     localStorage.setItem(`favRecipes_${user}`, JSON.stringify(favorites));
     localStorage.setItem(`triedRecipes_${user}`, JSON.stringify(tried));
     localStorage.setItem(`market_list_${user}`, JSON.stringify(shoppingList));
     localStorage.setItem(`apiCache_${user}`, JSON.stringify(apiCache));
-    
     localStorage.setItem('userName', userName);
     localStorage.setItem('user_lang', lang);
   }, [favorites, tried, userName, shoppingList, lang, apiCache]);
@@ -74,7 +71,6 @@ const App = () => {
   // --- AUTH HANDLERS ---
   const handleAuth = (name, selectedLang) => {
     const identifier = name || 'Guest';
-    
     const savedFavs = localStorage.getItem(`favRecipes_${identifier}`);
     const savedTried = localStorage.getItem(`triedRecipes_${identifier}`);
     const savedMarket = localStorage.getItem(`market_list_${identifier}`);
@@ -104,7 +100,72 @@ const App = () => {
     setApiCache({});
   };
 
-  // --- UPDATED TOGGLE HANDLERS (With API Caching) ---
+  // --- SEARCH ENGINE WITH FALLBACK LOGIC ---
+  const searchRecipes = useCallback(async (ingredientsList) => {
+    if (ingredientsList.length === 0) {
+      setRecipes([]);
+      return;
+    }
+    setIsLoading(true);
+    try {
+      const expandedSearch = ingredientsList.flatMap(ing => {
+        const alias = ingredientAliases[ing.toLowerCase()];
+        return alias ? [ing.toLowerCase(), alias] : [ing.toLowerCase()];
+      });
+
+      // 1. Local Nigerian Search
+      const localMatches = nigerianRecipes.map(recipe => {
+        const matched = recipe.ingredients.filter(ing => {
+          const ingName = (typeof ing === 'string' ? ing : ing.item).toLowerCase();
+          return expandedSearch.includes(ingName);
+        });
+        return { 
+          ...recipe, 
+          usedCount: matched.length, 
+          missedCount: recipe.ingredients.length - matched.length, 
+          isLocal: true 
+        };
+      }).filter(recipe => recipe.usedCount > 0);
+
+      // 2. Global API Search (MealDB) with Fallback
+      const lastIng = ingredientsList[ingredientsList.length - 1].toLowerCase();
+      const apiQuery = ingredientAliases[lastIng] || lastIng;
+
+      // Try filtering by primary ingredient first
+      let res = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${apiQuery.replace(' ', '_')}`);
+      let data = await res.json();
+
+      // FALLBACK: If ingredient filter fails, search by Name (better for items like Pasta/Vermicelli)
+      if (!data.meals) {
+        res = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${lastIng.replace(' ', '_')}`);
+        data = await res.json();
+      }
+
+      let formattedApi = [];
+      if (data.meals) {
+        formattedApi = data.meals.map(meal => ({
+          id: meal.idMeal,
+          name: meal.strMeal,
+          image: meal.strMealThumb,
+          usedCount: 1, 
+          missedCount: 0, 
+          isLocal: false
+        }));
+      }
+      setRecipes([...localMatches, ...formattedApi].sort((a, b) => b.usedCount - a.usedCount));
+    } catch (error) {
+      console.error("Search Error:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => searchRecipes(pantry), 400);
+    return () => clearTimeout(timer);
+  }, [pantry, searchRecipes]);
+
+  // --- SOCIAL & COLLECTION HANDLERS ---
   const toggleFavorite = (id) => {
     setFavorites(prev => {
       const isAdding = !prev.includes(id);
@@ -139,50 +200,6 @@ const App = () => {
     setShoppingList(prev => prev.filter(i => i !== item));
   };
 
-  // --- ASYNC SEARCH ENGINE ---
-  const searchRecipes = useCallback(async (ingredientsList) => {
-    if (ingredientsList.length === 0) {
-      setRecipes([]);
-      return;
-    }
-    setIsLoading(true);
-    try {
-      const localMatches = nigerianRecipes.map(recipe => {
-        const matched = recipe.ingredients.filter(ing => {
-          const ingName = typeof ing === 'string' ? ing : ing.item;
-          return ingredientsList.includes(ingName.toLowerCase());
-        });
-        return { ...recipe, usedCount: matched.length, missedCount: recipe.ingredients.length - matched.length, isLocal: true };
-      }).filter(recipe => recipe.usedCount > 0);
-
-      const mainQuery = ingredientsList[0].replace(' ', '_');
-      const response = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${mainQuery}`);
-      const data = await response.json();
-
-      let formattedApi = [];
-      if (data.meals) {
-        formattedApi = data.meals.map(meal => ({
-          id: meal.idMeal,
-          name: meal.strMeal,
-          image: meal.strMealThumb,
-          usedCount: 1, 
-          missedCount: 0, 
-          isLocal: false
-        }));
-      }
-      setRecipes([...localMatches, ...formattedApi].sort((a, b) => b.usedCount - a.usedCount));
-    } catch (error) {
-      console.error("Search Error:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    const timer = setTimeout(() => searchRecipes(pantry), 400);
-    return () => clearTimeout(timer);
-  }, [pantry, searchRecipes]);
-
   const addIngredient = (e) => {
     if (e.key === 'Enter' && inputValue.trim()) {
       const items = inputValue.split(',').map(i => i.trim().toLowerCase()).filter(i => i !== "" && !pantry.includes(i));
@@ -202,25 +219,15 @@ const App = () => {
       <Route path="/" element={
         isLoggedIn ? (
           <HomeView 
-            lang={lang}
-            setLang={setLang}
-            userName={userName}
-            pantry={pantry} 
-            setPantry={setPantry} 
-            ingredientCounts={ingredientCounts}
-            apiCache={apiCache} // PASSING CACHE TO HOMEVIEW
-            inputValue={inputValue} 
-            setInputValue={setInputValue} 
-            addIngredient={addIngredient} 
-            isLoading={isLoading} 
-            recipes={recipes} 
-            onLogout={handleLogout}
-            favorites={favorites}
-            tried={tried}
-            activeTab={activeTab}
-            setActiveTab={setActiveTab}
-            toggleFavorite={toggleFavorite}
-            toggleTried={toggleTried}
+            lang={lang} setLang={setLang} userName={userName}
+            pantry={pantry} setPantry={setPantry} 
+            apiCache={apiCache} ingredientCounts={ingredientCounts}
+            inputValue={inputValue} setInputValue={setInputValue} 
+            addIngredient={addIngredient} isLoading={isLoading} 
+            recipes={recipes} onLogout={handleLogout}
+            favorites={favorites} tried={tried}
+            activeTab={activeTab} setActiveTab={setActiveTab}
+            toggleFavorite={toggleFavorite} toggleTried={toggleTried}
             shoppingList={shoppingList}
             removeFromShoppingList={removeFromShoppingList}
             clearShoppingList={() => setShoppingList([])}

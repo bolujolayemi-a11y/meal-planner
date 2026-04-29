@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { 
-  ChevronLeft, Loader2, MapPin, Info, 
+  ChevronLeft, Loader2, MapPin, 
   Check, ShoppingCart, Plus, Minus 
 } from 'lucide-react';
 import { nigerianRecipes } from '../nigerianData';
@@ -44,16 +44,20 @@ const RecipeDetails = ({ lang, addToShoppingList, shoppingList }) => {
           
           const ingredients = [];
           for (let i = 1; i <= 20; i++) {
-            if (meal[`strIngredient${i}`]) {
+            const ing = meal[`strIngredient${i}`];
+            const measure = meal[`strMeasure${i}`];
+            if (ing && ing.trim() !== "") {
               ingredients.push({ 
-                original: `${meal[`strMeasure${i}`]} ${meal[`strIngredient${i}`]}` 
+                original: `${measure ? measure.trim() : ''} ${ing.trim()}`.trim()
               });
             }
           }
           
+          // Cleaner split for API instructions
           const steps = meal.strInstructions
-            .split(/\r?\n|\.\s+/)
-            .filter(s => s.length > 10)
+            .split(/(?:\r?\n)+|(?<=\.)\s+/)
+            .map(s => s.trim())
+            .filter(s => s.length > 5)
             .map((s, idx) => ({ number: idx + 1, step: s }));
 
           setBaseDetails({ 
@@ -64,7 +68,7 @@ const RecipeDetails = ({ lang, addToShoppingList, shoppingList }) => {
             isLocal: false 
           });
         } catch (e) { 
-          console.error(e); 
+          console.error("Fetch Error:", e); 
         } finally { 
           setLoading(false); 
         }
@@ -111,8 +115,9 @@ const RecipeDetails = ({ lang, addToShoppingList, shoppingList }) => {
   }, [baseDetails, lang]);
 
   // Logic to multiply numbers in ingredients based on portions
-  const formatIngredientText = (ing) => {
-    return ing.original.replace(/(\d+(\.\d+)?)/g, (match) => {
+  const formatIngredientText = (originalText) => {
+    if (!originalText) return "";
+    return originalText.replace(/(\d+(\.\d+)?)/g, (match) => {
       const num = parseFloat(match) * servings;
       return num % 1 === 0 ? num : num.toFixed(1);
     });
@@ -121,7 +126,7 @@ const RecipeDetails = ({ lang, addToShoppingList, shoppingList }) => {
   if (loading || !displayDetails) return (
     <div className="h-screen flex flex-col items-center justify-center text-orange-500">
       <Loader2 className="animate-spin w-10 h-10 mb-4" />
-      <p className="font-black uppercase tracking-widest text-[10px]">Updating Recipe...</p>
+      <p className="font-black uppercase tracking-widest text-[10px]">Updating Recipe Details...</p>
     </div>
   );
 
@@ -129,14 +134,16 @@ const RecipeDetails = ({ lang, addToShoppingList, shoppingList }) => {
 
   return (
     <div className="min-h-screen bg-white" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
+      {/* Header / Image Section */}
       <div className="relative h-80">
         <img src={displayDetails.image} className="w-full h-full object-cover" alt={displayDetails.title} />
         <div className="absolute inset-0 bg-linear-to-t from-black/70 via-transparent to-transparent" />
-        <button onClick={() => navigate(-1)} className="absolute top-6 left-6 p-3 bg-white/20 backdrop-blur-md rounded-2xl text-white">
+        <button onClick={() => navigate(-1)} className="absolute top-6 left-6 p-3 bg-white/20 backdrop-blur-md rounded-2xl text-white hover:bg-white/40 transition-all">
           <ChevronLeft size={24} />
         </button>
       </div>
 
+      {/* Main Content Card */}
       <main className="p-8 max-w-6xl mx-auto -mt-20 bg-white rounded-t-[50px] shadow-2xl relative z-10">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8 mb-12">
           <div>
@@ -148,20 +155,20 @@ const RecipeDetails = ({ lang, addToShoppingList, shoppingList }) => {
             <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight">{displayDetails.title}</h1>
           </div>
 
-          {/* PORTIONS COUNTER */}
+          {/* Portions Counter */}
           <div className="flex items-center gap-6 bg-slate-900 p-2 rounded-3xl border-4 border-white shadow-xl">
             <div className="pl-5 pr-3">
               <p className="text-[9px] font-black uppercase text-slate-500">Portions</p>
               <p className="text-2xl font-black text-white">{servings.toString().padStart(2, '0')}</p>
             </div>
             <div className="flex gap-1">
-              <button onClick={() => setServings(Math.max(1, servings - 1))} className="w-12 h-12 bg-slate-800 text-white rounded-2xl flex items-center justify-center hover:bg-orange-500"><Minus size={18} /></button>
-              <button onClick={() => setServings(servings + 1)} className="w-12 h-12 bg-orange-500 text-white rounded-2xl flex items-center justify-center hover:bg-orange-600"><Plus size={18} /></button>
+              <button onClick={() => setServings(Math.max(1, servings - 1))} className="w-12 h-12 bg-slate-800 text-white rounded-2xl flex items-center justify-center hover:bg-orange-500 transition-colors"><Minus size={18} /></button>
+              <button onClick={() => setServings(servings + 1)} className="w-12 h-12 bg-orange-500 text-white rounded-2xl flex items-center justify-center hover:bg-orange-600 transition-colors"><Plus size={18} /></button>
             </div>
           </div>
         </div>
 
-        {/* NUTRITION GRID */}
+        {/* Nutrition Grid */}
         <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-16">
           {Object.entries(nutrition).map(([key, val]) => (
             <div key={key} className="bg-orange-50/50 rounded-[30px] py-5 px-2 text-center border border-orange-100">
@@ -172,6 +179,7 @@ const RecipeDetails = ({ lang, addToShoppingList, shoppingList }) => {
         </div>
         
         <div className="grid lg:grid-cols-12 gap-12">
+          {/* Ingredients List */}
           <div className="lg:col-span-4">
             <h2 className="text-xl font-black mb-6 text-slate-800 uppercase tracking-widest border-b-4 border-orange-500 inline-block">{t.ingredients}</h2>
             <ul className="space-y-3">
@@ -179,7 +187,9 @@ const RecipeDetails = ({ lang, addToShoppingList, shoppingList }) => {
                 const isAdded = shoppingList.includes(ing.original);
                 return (
                   <li key={i} onClick={() => addToShoppingList(ing.original)} className={`p-4 rounded-2xl flex justify-between items-center cursor-pointer transition-all border ${isAdded ? 'bg-green-50 border-green-100' : 'bg-slate-50 border-slate-50 hover:border-orange-200'}`}>
-                    <span className={`text-sm font-bold ${isAdded ? 'text-green-700/60 line-through' : 'text-slate-600'}`}>{formatIngredientText(ing)}</span>
+                    <span className={`text-sm font-bold ${isAdded ? 'text-green-700/60 line-through' : 'text-slate-600'}`}>
+                      {formatIngredientText(ing.original)}
+                    </span>
                     {isAdded ? <Check size={16} className="text-green-500" strokeWidth={3} /> : <ShoppingCart size={16} className="text-slate-300" />}
                   </li>
                 );
@@ -187,6 +197,7 @@ const RecipeDetails = ({ lang, addToShoppingList, shoppingList }) => {
             </ul>
           </div>
 
+          {/* Cooking Steps */}
           <div className="lg:col-span-8">
             <h2 className="text-xl font-black mb-6 text-slate-800 uppercase tracking-widest border-b-4 border-orange-500 inline-block">{t.steps}</h2>
             <div className="space-y-8">

@@ -182,17 +182,43 @@ const HomeView = ({
                   {activeTab === 'all' ? <Utensils size={32} className="text-slate-200" /> : activeTab === 'favorites' ? <Heart size={32} className="text-slate-200" /> : <ChefHat size={32} className="text-slate-200" />}
                 </div>
                 
-                <h3 className="text-slate-800 font-black text-xl mb-2">
-                  {activeTab === 'all' ? "No ingredients selected" : activeTab === 'favorites' ? "No favorites yet" : "No attempted recipes"}
-                </h3>
-                
-                <button 
-                  onClick={() => setActiveTab(activeTab === 'all' ? 'pantry' : 'all')} 
-                  className="group flex items-center gap-3 bg-slate-900 text-white px-10 py-4 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] shadow-xl hover:bg-orange-500 transition-all active:scale-95"
-                >
-                  {activeTab === 'all' ? "Go to Pantry" : "Go Discover Recipes"}
-                  <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-                </button>
+                {/* --- COMPLETED EMPTY STATES --- */}
+                {activeTab === 'all' && pantry.length > 0 ? (
+                  <>
+                    <h3 className="text-slate-800 font-black text-xl mb-2">
+                      No recipes found
+                    </h3>
+                    <p className="text-slate-400 text-sm mb-8 max-w-xs mx-auto font-medium leading-relaxed">
+                      We couldn't find anything matching "<span className="text-slate-600 font-bold">{pantry.join(', ')}</span>". 
+                      Try a more general ingredient or check your spelling.
+                    </p>
+                    <button 
+                      onClick={() => { setPantry([]); setInputValue(''); }}
+                      className="flex items-center gap-3 bg-slate-900 text-white px-10 py-4 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] shadow-xl hover:bg-orange-500 transition-all active:scale-95"
+                    >
+                      Clear Search
+                      <X size={14} />
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <h3 className="text-slate-800 font-black text-xl mb-2">
+                      {activeTab === 'all' ? "Start your search" : activeTab === 'favorites' ? "Your saved list is empty" : "No cooked recipes yet"}
+                    </h3>
+                    <p className="text-slate-400 text-sm mb-8 max-w-xs mx-auto font-medium">
+                      {activeTab === 'all' 
+                        ? "Enter an ingredient above or pick from the pantry to see what you can cook today." 
+                        : "Go back to the finder to explore and save your favorite meals."}
+                    </p>
+                    <button 
+                      onClick={() => setActiveTab(activeTab === 'all' ? 'pantry' : 'all')} 
+                      className="group flex items-center gap-3 bg-slate-900 text-white px-10 py-4 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] shadow-xl hover:bg-orange-500 transition-all active:scale-95"
+                    >
+                      {activeTab === 'all' ? "Go to Pantry" : "Go Discover Recipes"}
+                      <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                    </button>
+                  </>
+                )}
               </div>
             )}
           </div>
