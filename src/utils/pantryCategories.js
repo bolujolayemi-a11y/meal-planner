@@ -49,7 +49,7 @@ export const pantryCategories = [
     id: 'veggies',
     label: 'Vegetables & Greens',
     icon: '🥬',
-    items: ['tomato', 'pepper', 'ugwu', 'spinach', 'cabbage', 'lettuce', 'okra', 'cucumber', 'broccoli', 'cauliflower', 'green beans', 'peas']
+    items: ['tomato', 'pepper', 'ugwu', 'ewedu','spinach', 'cabbage', 'lettuce', 'okra', 'cucumber', 'broccoli', 'cauliflower', 'green beans', 'peas']
   },
   {
     id: 'herbs',

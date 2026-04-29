@@ -43,7 +43,9 @@ export const ingredientAliases = {
   'plantain': 'banana',
   'scallions': 'spring onions',
   'habanero': 'chili',
-
+  'ewedu': 'ewedu leaf',
+  'ewedu leaf': 'ewedu',
+  'jute leaves': 'ewedu',
   // --- PASTA & NOODLES ---
   'pasta': 'penne',
   'macaroni': 'macaroni',
