@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Mail, Lock, User, Eye, EyeOff, ArrowRight, Globe, Loader2, Search, ChevronRight } from 'lucide-react';
-import { supabase } from '../supabaseClient';
+import { api } from '../apiClient';
 
 const Signup = ({ onAuth }) => {
   const navigate = useNavigate();
@@ -31,31 +31,23 @@ const Signup = ({ onAuth }) => {
 
     try {
       if (mode === 'signup') {
-        const { error: dbError } = await supabase.from('registered_users').insert([{ 
-          email: formData.email, name: formData.name, password_hint: formData.password 
-        }]);
-        if (dbError) throw dbError;
+        const result = await api.signup(formData.name, formData.email, formData.password);
+        if (!result.success) throw new Error(result.error);
         setTempUser({ name: formData.name, email: formData.email });
         setStep('lang');
       } else {
-        const { data, error: dbError } = await supabase
-          .from('registered_users')
-          .select('name')
-          .eq('email', formData.email)
-          .eq('password_hint', formData.password)
-          .single();
-
-        if (dbError || !data) throw new Error("Invalid credentials");
+        const result = await api.signin(formData.email, formData.password);
+        if (!result.success) throw new Error(result.error || "Invalid credentials");
         
         const savedLang = localStorage.getItem(`lang_pref_${formData.email}`);
         if (savedLang) {
           // KEY FIX: Set storage first, then pass lang to onAuth
           localStorage.setItem('user_lang', savedLang);
           localStorage.setItem('isLoggedIn', 'true');
-          onAuth(data.name, savedLang); 
+          onAuth(result.data.name, savedLang); 
           navigate('/');
         } else {
-          setTempUser({ name: data.name, email: formData.email });
+          setTempUser({ name: result.data.name, email: formData.email });
           setStep('lang');
         }
       }
@@ -71,7 +63,7 @@ const Signup = ({ onAuth }) => {
     try {
       const ipRes = await fetch('https://api.ipify.org?format=json');
       const ipData = await ipRes.json();
-      await supabase.from('guest_entries').insert([{ ip_address: ipData.ip }]);
+      await api.guestEntry(ipData.ip);
       
       setTempUser({ name: 'Guest', email: 'guest_session' });
       setStep('lang'); 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Mail, ArrowLeft, Loader2, CheckCircle } from 'lucide-react';
-import { supabase } from '../supabaseClient';
+import { api } from '../apiClient';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
@@ -15,15 +15,10 @@ const ForgotPassword = () => {
     setMessage('');
 
     try {
-      const { data, error } = await supabase
-        .from('registered_users')
-        .select('password_hint')
-        .eq('email', email)
-        .single();
+      const result = await api.forgotPassword(email);
+      if (!result.success) throw new Error(result.error);
 
-      if (error || !data) throw new Error("Email not found in our records.");
-
-      setRecoveredPass(data.password_hint);
+      setRecoveredPass(result.data.password_hint);
       setMessage("Account found! Your password has been recovered.");
     } catch (err) {
       setMessage(err.message);

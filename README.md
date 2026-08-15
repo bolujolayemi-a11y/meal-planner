@@ -74,7 +74,7 @@ Users can:
 - Save favorite recipes
 - Track cooked meals
 
-Data is persisted using **Supabase** and local storage for a seamless experience.
+Data is persisted using **CockroachDB** and local storage for a seamless experience.
 
 ---
 
@@ -82,7 +82,8 @@ Data is persisted using **Supabase** and local storage for a seamless experience
 
 - **Frontend:** React (Vite)
 - **Styling:** Tailwind CSS
-- **Backend & Auth:** Supabase
+- **Backend:** Vercel Serverless Functions
+- **Database:** CockroachDB
 - **External API:** TheMealDB
 - **State Management:** React Hooks
 - **Deployment:** Vercel
@@ -95,28 +96,69 @@ Data is persisted using **Supabase** and local storage for a seamless experience
 
 ```bash
 git clone https://github.com/your-username/pantry-guide.git
-cd pantry-guide
+cd meal_planner_app
 ```
 
-### 2. Install Dependencies
+### 2. Install Frontend Dependencies
 
 ```bash
+cd meal-planner
 npm install
 ```
 
 ### 3. Configure Environment Variables
 
-Create a `.env` file in the root directory and add:
+Create a `.env` file in the frontend root directory and add:
 
 ```env
-VITE_SUPABASE_URL=your_supabase_url
-VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+VITE_API_URL=
 ```
 
-### 4. Run the App
+For Vercel deployment, set the following environment variables in your Vercel project settings:
+
+```env
+DATABASE_URL=your_cockroachdb_connection_string
+DATABASE_SSL=true
+```
+
+### 4. Set up CockroachDB
+
+Run the schema.sql file in your CockroachDB instance:
 
 ```bash
-npm run dev
+# From the api directory
+cockroach sql < schema.sql
+```
+
+### 5. Deploy to Vercel
+
+Install Vercel CLI and deploy:
+
+```bash
+npm install -g vercel
+vercel
+```
+
+Or connect your GitHub repository to Vercel for automatic deployments.
+
+### 6. Local Development
+
+For local development with serverless functions:
+
+```bash
+# Install Vercel CLI
+npm install -g vercel
+
+# Start local development environment
+vercel dev
+```
+
+This will run both the frontend and serverless functions locally.
+
+### 7. Production Build
+
+```bash
+npm run build
 ```
 
 ## 📲 Mobile Access
